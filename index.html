@@ -3,95 +3,234 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Van Rentals – Book your van online</title>
-  <meta name="description" content="Rent a camper, cargo or passenger van. Check live availability and send a booking request in minutes." />
+  <title>Van Rentals Athens – Book your van online</title>
+  <meta name="description" content="Rent a camper, cargo or passenger van in Athens. Check live availability, choose pickup and return points on the map and send a booking request in minutes." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <!-- ===== Header ===== -->
   <header class="site-header">
     <div class="wrap">
-      <span class="brand" id="brandName">Van Rentals</span>
+      <a class="brand" href="#top" id="brandName">Van Rentals</a>
+      <nav class="nav" aria-label="Main">
+        <a href="#fleet">Our vans</a>
+        <a href="#how">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <a class="btn btn-sign btn-sm" href="#book">Book now</a>
     </div>
   </header>
 
-  <main class="wrap">
-    <!-- Hero + progress -->
+  <main id="top">
+    <!-- ===== Hero ===== -->
     <section class="hero">
-      <h1>Pick your dates.<br />We’ll show the vans that are free.</h1>
+      <div class="wrap">
+        <h1>Pick your dates.<br />We’ll show the vans that are free.</h1>
+        <p>Campers, cargo vans and people carriers in Athens. Choose your pickup and return points on the map and send your request in a few minutes.</p>
+        <div class="hero-cta">
+          <a class="btn btn-sign" href="#book">Check availability</a>
+          <a class="btn btn-ghost js-wa" href="#contact" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Booking wizard (3 steps) ===== -->
+    <section id="book" class="wrap">
       <ol class="stepper" aria-label="Booking progress">
         <li data-step="1" class="active">Choose a van</li>
         <li data-step="2">Your details</li>
         <li data-step="3">Done</li>
       </ol>
-    </section>
 
-    <!-- STEP 1: search + results -->
-    <section id="step1" class="panel">
-      <form id="searchForm" class="search-bar" novalidate>
-        <label>Pickup date
-          <input type="date" id="startDate" required />
-        </label>
-        <label>Return date
-          <input type="date" id="endDate" required />
-        </label>
-        <label>Van type
-          <select id="categoryFilter"><option value="">All types</option></select>
-        </label>
-        <button type="submit" class="btn btn-primary">Check availability</button>
-      </form>
-      <p id="searchError" class="error" role="alert" hidden></p>
-      <p id="resultsInfo" class="muted" aria-live="polite"></p>
-      <div id="results" class="grid"></div>
-    </section>
-
-    <!-- STEP 2: booking form -->
-    <section id="step2" class="panel" hidden>
-      <button type="button" id="backBtn" class="link-btn">← Back to vans</button>
-      <div class="booking-layout">
-        <form id="bookingForm" novalidate>
-          <h2>Your details</h2>
-          <label>Full name <input id="fullName" autocomplete="name" required minlength="2" /></label>
-          <label>Email <input id="email" type="email" autocomplete="email" required /></label>
-          <label>Phone <input id="phone" type="tel" autocomplete="tel" required minlength="6" /></label>
-          <label>Driver’s license number <input id="license" required minlength="3" /></label>
-          <!-- Honeypot: hidden from humans, bots fill it in -->
-          <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
-          <p id="bookingError" class="error" role="alert" hidden></p>
-          <button type="submit" id="submitBtn" class="btn btn-primary">Send booking request</button>
+      <!-- STEP 1 -->
+      <div id="step1" class="panel">
+        <form id="searchForm" class="search-bar" novalidate>
+          <label>Pickup date
+            <input type="date" id="startDate" required />
+          </label>
+          <label>Return date
+            <input type="date" id="endDate" required />
+          </label>
+          <label>Van type
+            <select id="categoryFilter"><option value="">All types</option></select>
+          </label>
+          <button type="submit" class="btn btn-primary">Check availability</button>
         </form>
+        <p id="searchError" class="error" role="alert" hidden></p>
+        <p id="resultsInfo" class="muted" aria-live="polite"></p>
+        <div id="results" class="grid"></div>
+      </div>
 
-        <aside class="summary" aria-label="Booking summary">
-          <h2>Summary</h2>
-          <img id="sumImg" alt="" />
-          <p class="sum-name" id="sumName"></p>
-          <dl>
-            <dt>Pickup</dt><dd id="sumStart"></dd>
-            <dt>Return</dt><dd id="sumEnd"></dd>
-            <dt>Days</dt><dd id="sumDays"></dd>
-            <dt>Price per day</dt><dd id="sumRate"></dd>
-          </dl>
-          <p class="total"><span>Total</span><strong id="sumTotal"></strong></p>
-        </aside>
+      <!-- STEP 2 -->
+      <div id="step2" class="panel" hidden>
+        <button type="button" id="backBtn" class="link-btn">← Back to vans</button>
+        <div class="booking-layout">
+          <form id="bookingForm" novalidate>
+            <h2>Your details</h2>
+
+            <label for="fullName">Full name
+              <input id="fullName" autocomplete="name" aria-describedby="fullName-error" />
+            </label>
+            <p class="field-error" id="fullName-error" hidden></p>
+
+            <label for="email">Email
+              <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" aria-describedby="email-error" />
+            </label>
+            <p class="field-error" id="email-error" hidden></p>
+
+            <label for="phone">Phone / WhatsApp
+              <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+30 69X XXX XXXX" aria-describedby="phone-hint phone-error" />
+            </label>
+            <p class="hint" id="phone-hint">Include the country code if you’re outside Greece.</p>
+            <p class="field-error" id="phone-error" hidden></p>
+
+            <h2 class="form-sub">Pickup &amp; return</h2>
+            <p class="hint">Type an address in the Athens area and pick a suggestion, or tap the map. Drag a pin to fine-tune.</p>
+
+            <div class="loc-field">
+              <label for="pickupAddress">Pickup address
+                <input id="pickupAddress" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="pickupAddress-list" aria-autocomplete="list" aria-describedby="pickupAddress-error" />
+              </label>
+              <ul class="suggest" id="pickupAddress-list" role="listbox" hidden></ul>
+            </div>
+            <p class="field-error" id="pickupAddress-error" hidden></p>
+
+            <div class="loc-field">
+              <label for="returnAddress">Return address
+                <input id="returnAddress" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="returnAddress-list" aria-autocomplete="list" aria-describedby="returnAddress-error" />
+              </label>
+              <ul class="suggest" id="returnAddress-list" role="listbox" hidden></ul>
+            </div>
+            <p class="field-error" id="returnAddress-error" hidden></p>
+
+            <label class="check-row"><input type="checkbox" id="sameAsPickup" /> Return to the same place as pickup</label>
+
+            <fieldset class="mode">
+              <legend>Tapping the map sets the…</legend>
+              <label><input type="radio" name="mapMode" value="pickup" checked /><span>Pickup point</span></label>
+              <label><input type="radio" name="mapMode" value="return" /><span>Return point</span></label>
+            </fieldset>
+            <div class="map-wrap"><div id="map" role="application" aria-label="Map of Athens to choose pickup and return points"></div></div>
+            <p class="hint" id="mapMsg" aria-live="polite"></p>
+
+            <!-- Honeypot: hidden from humans, bots fill it in -->
+            <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+            <p id="bookingError" class="error" role="alert" hidden></p>
+            <button type="submit" id="submitBtn" class="btn btn-primary">Send booking request</button>
+          </form>
+
+          <aside class="summary" aria-label="Booking summary">
+            <h2>Summary</h2>
+            <img id="sumImg" alt="" />
+            <p class="sum-name" id="sumName"></p>
+            <dl>
+              <dt>Pickup</dt><dd id="sumStart"></dd>
+              <dt>Return</dt><dd id="sumEnd"></dd>
+              <dt>Days</dt><dd id="sumDays"></dd>
+              <dt>Price per day</dt><dd id="sumRate"></dd>
+            </dl>
+            <p class="total"><span>Total</span><strong id="sumTotal"></strong></p>
+          </aside>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div id="step3" class="panel confirm" hidden>
+        <div class="check" aria-hidden="true">✓</div>
+        <h2>Thank you!</h2>
+        <p>Your booking request has been submitted. We will contact you shortly.</p>
+        <p class="muted" id="confirmRef"></p>
+        <button type="button" id="newBookingBtn" class="btn btn-primary">Make another booking</button>
       </div>
     </section>
 
-    <!-- STEP 3: confirmation -->
-    <section id="step3" class="panel confirm" hidden>
-      <div class="check" aria-hidden="true">✓</div>
-      <h2>Thank you!</h2>
-      <p>Your booking request has been submitted. We will contact you shortly.</p>
-      <p class="muted" id="confirmRef"></p>
-      <button type="button" id="newBookingBtn" class="btn btn-primary">Make another booking</button>
+    <!-- ===== Fleet ===== -->
+    <section id="fleet" class="section">
+      <div class="wrap">
+        <h2>Our vans</h2>
+        <p class="section-lead">Every van on this list can be booked online. Pick your dates to see which are free.</p>
+        <div id="fleetGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== How it works ===== -->
+    <section id="how" class="section section-alt">
+      <div class="wrap">
+        <h2>How it works</h2>
+        <ol class="how">
+          <li><strong>Choose dates and a van</strong><span>Only vans that are free for your whole trip are shown.</span></li>
+          <li><strong>Send your request</strong><span>Add your details and mark the pickup and return points on the map.</span></li>
+          <li><strong>We confirm with you</strong><span>We contact you by phone or email to confirm the booking.</span></li>
+          <li><strong>Pick up the keys</strong><span>Bring your driver’s license. We check it in person at pickup.</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== Why us ===== -->
+    <section class="section">
+      <div class="wrap">
+        <h2>Why rent with us</h2>
+        <div class="perks">
+          <div><strong>Live availability</strong><p>No back-and-forth: you see exactly which vans are free.</p></div>
+          <div><strong>Clear total price</strong><p>Price per day × number of days, shown before you send anything.</p></div>
+          <div><strong>Your pickup, your return</strong><p>Choose where the van meets you and where you leave it in Athens.</p></div>
+          <div><strong>A real person replies</strong><p>Reach us on WhatsApp or email any time with questions.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section id="faq" class="section section-alt">
+      <div class="wrap">
+        <h2>Questions</h2>
+        <div class="faq">
+          <details><summary>Do I pay when I send the request?</summary><p>No. A request is not a payment. We contact you first to confirm availability and the details.</p></details>
+          <details><summary>How are rental days counted?</summary><p>Both the pickup day and the return day count. For example, 10 June to 12 June is 3 days.</p></details>
+          <details><summary>Which area do you cover?</summary><p>Pickup and return addresses are in the Athens area. Need something else? Message us and we’ll see what’s possible.</p></details>
+          <details><summary>What do I need at pickup?</summary><p>A valid driver’s license. We check it in person, so you don’t upload anything online.</p></details>
+          <details><summary>Can I change or cancel a request?</summary><p>Yes, just contact us by WhatsApp or email with your name and dates.</p></details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section id="contact" class="section">
+      <div class="wrap">
+        <div class="contact">
+          <div>
+            <h2>Talk to us directly</h2>
+            <p>Questions before you book, a special route, or a last-minute request? Write to us.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">WhatsApp us</a>
+            <a class="btn btn-sign js-mail" href="#contact">Email us</a>
+          </div>
+        </div>
+      </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="wrap">© <span id="year"></span> Van Rentals</div></footer>
+  <footer class="site-footer"><div class="wrap">© <span id="year"></span> Van Rentals · Athens, Greece</div></footer>
 
-  <!-- supabase-js pinned to an exact version -->
+  <!-- Floating contact buttons -->
+  <div class="fab-wrap">
+    <a class="fab fab-wa js-wa" href="#contact" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+      <span>WhatsApp</span>
+    </a>
+    <a class="fab fab-mail js-mail" href="#contact" aria-label="Send an email">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.400l-8 5-8-5z"/></svg>
+      <span>Email</span>
+    </a>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
   <script src="js/config.js"></script>
   <script src="js/app.js"></script>
 </body>
