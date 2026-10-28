@@ -28,7 +28,7 @@
   };
   const FALLBACK_IMG =
     "data:image/svg+xml;utf8," +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#ece4d6"/><text x="50%" y="50%" text-anchor="middle" fill="#6a6f68" font-family="sans-serif" font-size="32">Χωρίς φωτογραφία</text></svg>');
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#e6ebf0"/><text x="50%" y="50%" text-anchor="middle" fill="#5c6770" font-family="sans-serif" font-size="32">Χωρίς φωτογραφία</text></svg>');
 
   // Known English category values (from the sample data) get Greek labels; the raw value is still used for filtering.
   const CATEGORY_LABELS = { Camper: "Κάμπερ", Cargo: "Μεταφορικό", Passenger: "Επιβατικό", Van: "Βαν" };
@@ -71,9 +71,43 @@
   /* Header (solid on scroll), mobile menu, scroll-reveal                */
   /* ------------------------------------------------------------------ */
   const header = $("siteHeader");
-  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
+  const scrollBar = $("scrollProgress");
+  const toTop = $("toTop");
+  const navLinks = [...document.querySelectorAll("#mainNav a")];
+  const spySections = [...document.querySelectorAll("main section[id]")];
+
+  const syncToTop = (show) => {
+    if (!toTop) return;
+    toTop.classList.toggle("is-visible", show);
+    toTop.setAttribute("aria-hidden", String(!show));
+    toTop.tabIndex = show ? 0 : -1;
+  };
+
+  const markNav = (y) => {
+    const line = y + 110;
+    let current = "";
+    spySections.forEach((sec) => {
+      if (sec.offsetTop <= line) current = sec.id;
+    });
+    navLinks.forEach((a) => a.classList.toggle("is-current", a.getAttribute("href") === "#" + current));
+  };
+
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle("scrolled", y > 8);
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    if (scrollBar) scrollBar.style.transform = `scaleX(${max > 0 ? Math.min(1, y / max) : 0})`;
+    syncToTop(y > 520);
+    markNav(y);
+  };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
+
+  if (toTop) {
+    toTop.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    });
+  }
 
   const menuBtn = $("menuBtn");
   const setMenu = (open) => {
