@@ -1,5 +1,6 @@
-/* Van Rentals – frontend logic (vanilla JS, no build step).
+/* Ενοικίαση Βαν – frontend logic (vanilla JS, no build step).
  * Flow: Step 1 search -> Step 2 details + map -> Step 3 confirmation.
+ * Supabase calls (get_available_vans, create_booking, vans select) are unchanged.
  * Needs: supabase-js, Leaflet (loaded in index.html) and js/config.js. */
 (() => {
   "use strict";
@@ -7,15 +8,17 @@
   const cfg = window.APP_CONFIG;
   const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
   const $ = (id) => document.getElementById(id);
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const state = { start: null, end: null, van: null, days: 0 };
+  const state = { start: null, end: null, van: null, days: 0, step: 1 };
 
   /* ------------------------------------------------------------------ */
   /* Helpers                                                             */
   /* ------------------------------------------------------------------ */
-  const money = (n) => `${cfg.CURRENCY}${Number(n).toFixed(2)}`;
+  const money = (n) => new Intl.NumberFormat("el-GR", { style: "currency", currency: "EUR" }).format(Number(n));
   const fmtDate = (iso) =>
-    new Date(iso + "T00:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+    new Date(iso + "T00:00:00").toLocaleDateString("el-GR", { day: "numeric", month: "long", year: "numeric" });
+  const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
   // Inclusive day count, identical to the DB logic (start and end day both count).
   const countDays = (a, b) => Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
   const todayISO = () => {
@@ -25,48 +28,97 @@
   };
   const FALLBACK_IMG =
     "data:image/svg+xml;utf8," +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#e8eeec"/><text x="50%" y="50%" text-anchor="middle" fill="#5d6b73" font-family="sans-serif" font-size="32">No photo</text></svg>');
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#dfe8ea"/><text x="50%" y="50%" text-anchor="middle" fill="#5b6a72" font-family="sans-serif" font-size="32">Χωρίς φωτογραφία</text></svg>');
+
+  // Known English category values (from the sample data) get Greek labels; the raw value is still used for filtering.
+  const CATEGORY_LABELS = { Camper: "Κάμπερ", Cargo: "Μεταφορικό", Passenger: "Επιβατικό", Van: "Βαν" };
+  const catLabel = (c) => CATEGORY_LABELS[c] || c;
 
   const showError = (el, msg) => { el.textContent = msg; el.hidden = !msg; };
 
   function friendlyError(err) {
     const m = (err && err.message) || "";
-    if (m.includes("van_not_available")) return "Sorry, this van was just booked for those dates. Please choose another van or dates.";
-    if (m.includes("invalid_dates")) return "Please choose valid dates (today or later, return after pickup).";
-    if (m.includes("invalid_customer")) return "Please check your name, email and phone number and try again.";
-    if (m.includes("invalid_address")) return "Please enter both a pickup and a return address.";
-    return "Something went wrong. Please try again in a moment.";
+    if (m.includes("van_not_available")) return "Λυπούμαστε, το βαν μόλις κρατήθηκε για αυτές τις ημερομηνίες. Επιλέξτε άλλο βαν ή άλλες ημερομηνίες.";
+    if (m.includes("invalid_dates")) return "Επιλέξτε έγκυρες ημερομηνίες (από σήμερα και μετά, με επιστροφή μετά την παραλαβή).";
+    if (m.includes("invalid_customer")) return "Ελέγξτε το όνομα, το email και το τηλέφωνό σας και δοκιμάστε ξανά.";
+    if (m.includes("invalid_address")) return "Συμπληρώστε διεύθυνση παραλαβής και επιστροφής.";
+    return "Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.";
   }
 
+  /* ------------------------------------------------------------------ */
+  /* Wizard step navigation (direction-aware slide animation)            */
+  /* ------------------------------------------------------------------ */
   function goToStep(n) {
-    [1, 2, 3].forEach((i) => ($("step" + i).hidden = i !== n));
+    const forward = n >= state.step;
+    state.step = n;
+    [1, 2, 3].forEach((i) => {
+      const el = $("step" + i);
+      el.hidden = i !== n;
+      el.classList.remove("enter-fwd", "enter-back");
+      if (i === n) { void el.offsetWidth; el.classList.add(forward ? "enter-fwd" : "enter-back"); }
+    });
     document.querySelectorAll(".stepper li").forEach((li) => {
       const s = Number(li.dataset.step);
       li.classList.toggle("active", s === n);
       li.classList.toggle("done", s < n);
     });
-    $("book").scrollIntoView({ behavior: "smooth", block: "start" });
-    if (n === 2) initMap(); // Leaflet needs the container to be visible
+    $("book").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+    if (n === 2) initMap(); // Leaflet needs a visible container
   }
+
+  /* ------------------------------------------------------------------ */
+  /* Header (solid on scroll), mobile menu, scroll-reveal                */
+  /* ------------------------------------------------------------------ */
+  const header = $("siteHeader");
+  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 24);
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  const menuBtn = $("menuBtn");
+  const setMenu = (open) => {
+    header.classList.toggle("open", open);
+    menuBtn.setAttribute("aria-expanded", String(open));
+    menuBtn.setAttribute("aria-label", open ? "Κλείσιμο μενού" : "Άνοιγμα μενού");
+  };
+  menuBtn.addEventListener("click", () => setMenu(!header.classList.contains("open")));
+  $("mainNav").addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") setMenu(false); });
+
+  // Fade-up on scroll. After the animation the attribute is removed so hover transitions work normally.
+  const io = "IntersectionObserver" in window && !reduceMotion
+    ? new IntersectionObserver((entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const el = en.target;
+          io.unobserve(el);
+          el.classList.add("in");
+          const delay = parseFloat(getComputedStyle(el).getPropertyValue("--i") || 0) * 90;
+          setTimeout(() => { el.removeAttribute("data-reveal"); el.classList.remove("in"); }, 900 + delay);
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -40px 0px" })
+    : null;
+  function observeReveals(root = document) {
+    root.querySelectorAll("[data-reveal]").forEach((el) => (io ? io.observe(el) : el.removeAttribute("data-reveal")));
+  }
+  observeReveals();
 
   /* ------------------------------------------------------------------ */
   /* Contact links (WhatsApp / Email) – values come from config.js       */
   /* ------------------------------------------------------------------ */
   const waNumber = String(cfg.WHATSAPP_NUMBER || "").replace(/\D/g, "");
-  const waText = encodeURIComponent("Hello! I have a question about renting a van.");
+  const waText = encodeURIComponent("Γεια σας! Θα ήθελα πληροφορίες για ενοικίαση βαν.");
   document.querySelectorAll(".js-wa").forEach((a) => {
     if (waNumber) a.href = `https://wa.me/${waNumber}?text=${waText}`;
     else a.hidden = true; // no number configured -> hide instead of a dead link
   });
   document.querySelectorAll(".js-mail").forEach((a) => {
-    if (cfg.CONTACT_EMAIL) a.href = `mailto:${cfg.CONTACT_EMAIL}?subject=${encodeURIComponent("Van rental question")}`;
+    if (cfg.CONTACT_EMAIL) a.href = `mailto:${cfg.CONTACT_EMAIL}?subject=${encodeURIComponent("Ερώτηση για ενοικίαση βαν")}`;
     else a.hidden = true;
   });
 
   /* ------------------------------------------------------------------ */
   /* Init                                                                */
   /* ------------------------------------------------------------------ */
-  if (cfg.BUSINESS_NAME) $("brandName").textContent = cfg.BUSINESS_NAME;
   $("year").textContent = new Date().getFullYear();
   $("startDate").min = $("endDate").min = todayISO();
 
@@ -78,54 +130,76 @@
   /* ------------------------------------------------------------------ */
   /* Van cards (used by search results and by the fleet section)         */
   /* ------------------------------------------------------------------ */
-  function buildCard(van, { priceLabel = "/ day", actionLabel, onAction }) {
+  function buildCard(van, { actionLabel, onAction, index = 0, reveal = false }) {
     const card = document.createElement("article");
     card.className = "card";
+    if (reveal) { card.setAttribute("data-reveal", ""); card.style.setProperty("--i", index % 4); }
 
+    const media = document.createElement("div"); media.className = "media";
     const img = document.createElement("img");
     img.src = van.image_url || FALLBACK_IMG;
     img.alt = van.name; img.loading = "lazy";
     img.onerror = () => { img.onerror = null; img.src = FALLBACK_IMG; };
+    const badge = document.createElement("span"); badge.className = "badge"; badge.textContent = catLabel(van.category);
+    media.append(img, badge);
 
     const body = document.createElement("div");
     body.className = "card-body";
     // textContent everywhere: never inject DB text as HTML
-    const tag = document.createElement("span"); tag.className = "tag"; tag.textContent = van.category;
     const h3 = document.createElement("h3"); h3.textContent = van.name;
     const specs = document.createElement("p"); specs.className = "specs"; specs.textContent = van.description || "";
     const foot = document.createElement("div"); foot.className = "card-foot";
     const price = document.createElement("div"); price.className = "price";
     price.append(money(van.price_per_day) + " ");
-    const small = document.createElement("small"); small.textContent = priceLabel; price.appendChild(small);
+    const small = document.createElement("small"); small.textContent = "/ ημέρα"; price.appendChild(small);
     const btn = document.createElement("button");
     btn.className = "btn btn-primary"; btn.type = "button"; btn.textContent = actionLabel;
     btn.addEventListener("click", () => onAction(van));
     foot.append(price, btn);
 
-    body.append(tag, h3, specs, foot);
-    card.append(img, body);
+    body.append(h3, specs, foot);
+    card.append(media, body);
     return card;
+  }
+
+  function skeletons(box, n = 3) {
+    box.innerHTML = "";
+    for (let i = 0; i < n; i++) {
+      const c = document.createElement("article");
+      c.className = "card skel";
+      c.innerHTML = '<div class="media"></div><div class="card-body"><i></i><i></i><i></i></div>';
+      box.appendChild(c);
+    }
   }
 
   // Categories + fleet section (both read the public, RLS-protected `vans` table)
   (async function loadFleet() {
-    const { data } = await sb.from("vans").select("*").order("price_per_day");
-    const vans = data || [];
+    const grid = $("fleetGrid");
+    skeletons(grid);
+    const { data, error } = await sb.from("vans").select("*").order("price_per_day");
+    grid.innerHTML = "";
+    const vans = error ? [] : data || [];
+    if (!vans.length) {
+      const p = document.createElement("p");
+      p.className = "muted";
+      p.textContent = error ? "Δεν ήταν δυνατή η φόρτωση των βαν. Δοκιμάστε ξανά αργότερα." : "Δεν υπάρχουν διαθέσιμα βαν αυτή τη στιγμή.";
+      grid.appendChild(p);
+      return;
+    }
     [...new Set(vans.map((v) => v.category))].sort().forEach((c) => {
       const o = document.createElement("option");
-      o.value = c; o.textContent = c;
+      o.value = c; o.textContent = catLabel(c);
       $("categoryFilter").appendChild(o);
     });
-    const grid = $("fleetGrid");
-    vans.forEach((van) =>
+    vans.forEach((van, i) =>
       grid.appendChild(buildCard(van, {
-        priceLabel: "/ day",
-        actionLabel: "Check dates",
+        actionLabel: "Έλεγχος ημερομηνιών", index: i, reveal: true,
         onAction: () => {
-          $("book").scrollIntoView({ behavior: "smooth" });
+          $("book").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
           setTimeout(() => $("startDate").focus({ preventScroll: true }), 500);
         },
       })));
+    observeReveals(grid);
   })();
 
   /* ------------------------------------------------------------------ */
@@ -135,18 +209,21 @@
     e.preventDefault();
     const start = $("startDate").value, end = $("endDate").value;
     showError($("searchError"), "");
-    if (!start || !end) return showError($("searchError"), "Please select both a pickup and a return date.");
-    if (end < start) return showError($("searchError"), "The return date must be on or after the pickup date.");
-    if (start < todayISO()) return showError($("searchError"), "The pickup date cannot be in the past.");
+    if (!start || !end) return showError($("searchError"), "Επιλέξτε ημερομηνία παραλαβής και επιστροφής.");
+    if (end < start) return showError($("searchError"), "Η ημερομηνία επιστροφής πρέπει να είναι ίδια ή μετά την παραλαβή.");
+    if (start < todayISO()) return showError($("searchError"), "Η ημερομηνία παραλαβής δεν μπορεί να είναι στο παρελθόν.");
 
-    $("resultsInfo").textContent = "Checking availability…";
-    $("results").innerHTML = "";
+    $("resultsInfo").textContent = "Έλεγχος διαθεσιμότητας…";
+    skeletons($("results"));
 
     // Server-side availability: excludes vans with pending/confirmed overlapping bookings
     const { data, error } = await sb.rpc("get_available_vans", {
       p_start: start, p_end: end, p_category: $("categoryFilter").value || null,
     });
-    if (error) { $("resultsInfo").textContent = ""; return showError($("searchError"), friendlyError(error)); }
+    if (error) {
+      $("results").innerHTML = ""; $("resultsInfo").textContent = "";
+      return showError($("searchError"), friendlyError(error));
+    }
 
     state.start = start; state.end = end; state.days = countDays(start, end);
     renderVans(data || []);
@@ -156,12 +233,14 @@
     const box = $("results");
     box.innerHTML = "";
     if (!vans.length) {
-      $("resultsInfo").textContent = "No vans are free on those dates. Try different dates or another van type.";
+      $("resultsInfo").textContent = "Δεν υπάρχουν ελεύθερα βαν για αυτές τις ημερομηνίες. Δοκιμάστε άλλες ημερομηνίες ή άλλο τύπο βαν.";
       return;
     }
     $("resultsInfo").textContent =
-      `${vans.length} van${vans.length > 1 ? "s" : ""} available · ${state.days} day${state.days > 1 ? "s" : ""}`;
-    vans.forEach((van) => box.appendChild(buildCard(van, { actionLabel: "Book this van", onAction: selectVan })));
+      `${plural(vans.length, "διαθέσιμο βαν", "διαθέσιμα βαν")} · ${plural(state.days, "ημέρα", "ημέρες")}`;
+    vans.forEach((van, i) =>
+      box.appendChild(buildCard(van, { actionLabel: "Κράτηση", onAction: selectVan, index: i, reveal: true })));
+    observeReveals(box);
   }
 
   function selectVan(van) {
@@ -179,7 +258,7 @@
   $("backBtn").addEventListener("click", () => goToStep(1));
 
   /* ------------------------------------------------------------------ */
-  /* Validation (email, phone, name, addresses)                          */
+  /* Validation with instant visual feedback                             */
   /* ------------------------------------------------------------------ */
   const EMAIL_RE = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*\.[A-Za-z]{2,}$/;
 
@@ -192,40 +271,52 @@
 
   const validators = {
     fullName: (v) =>
-      v.trim().length >= 2 && /\p{L}/u.test(v) ? "" : "Please enter your full name.",
+      v.trim().length >= 2 && /\p{L}/u.test(v) ? "" : "Συμπληρώστε το ονοματεπώνυμό σας.",
     email: (v) =>
-      EMAIL_RE.test(v.trim()) ? "" : "Enter a valid email, like name@example.com.",
+      EMAIL_RE.test(v.trim()) ? "" : "Εισάγετε έγκυρο email, π.χ. onoma@example.com.",
     phone: (v) => {
       const p = normalizePhone(v);
-      if (!p) return "Please enter your phone number.";
-      if (!/^\+?\d+$/.test(p)) return "Use digits only. You can start with + and spaces or dashes are fine.";
+      if (!p) return "Συμπληρώστε το τηλέφωνό σας.";
+      if (!/^\+?\d+$/.test(p)) return "Χρησιμοποιήστε μόνο ψηφία (μπορείτε να ξεκινήσετε με +). Κενά και παύλες δεν πειράζουν.";
       const digits = p.replace("+", "");
-      if (digits.length < 8 || digits.length > 15) return "Phone numbers have 8 to 15 digits. Please check yours.";
-      if (p.startsWith("+30") && digits.length !== 12) return "Greek numbers have 10 digits after +30.";
+      if (digits.length < 8 || digits.length > 15) return "Οι αριθμοί τηλεφώνου έχουν 8 έως 15 ψηφία. Ελέγξτε τον αριθμό σας.";
+      if (p.startsWith("+30") && digits.length !== 12) return "Οι ελληνικοί αριθμοί έχουν 10 ψηφία μετά το +30.";
       return "";
     },
-    pickupAddress: (v) => (v.trim().length >= 5 ? "" : "Please enter a pickup address in Athens."),
-    returnAddress: (v) => (v.trim().length >= 5 ? "" : "Please enter a return address in Athens."),
+    pickupAddress: (v) => (v.trim().length >= 5 ? "" : "Συμπληρώστε διεύθυνση παραλαβής στην Αθήνα."),
+    returnAddress: (v) => (v.trim().length >= 5 ? "" : "Συμπληρώστε διεύθυνση επιστροφής στην Αθήνα."),
   };
 
+  // Paint a field as valid / invalid / neutral.
+  function paintField(id, msg, valid) {
+    const input = $(id), field = input.closest(".field");
+    field.classList.toggle("is-invalid", !!msg);
+    field.classList.toggle("is-valid", valid);
+    input.setAttribute("aria-invalid", msg ? "true" : "false");
+    showError($(id + "-error"), msg);
+  }
+
   function validateField(id, show = true) {
-    const input = $(id), msg = validators[id](input.value);
-    if (show) {
-      input.classList.toggle("invalid", !!msg);
-      input.setAttribute("aria-invalid", msg ? "true" : "false");
-      showError($(id + "-error"), msg);
-    }
+    const value = $(id).value, msg = validators[id](value);
+    if (show) paintField(id, msg, !msg && value.trim() !== "");
     return !msg;
   }
 
   Object.keys(validators).forEach((id) => {
     const input = $(id);
     input.addEventListener("blur", () => {
+      input.dataset.touched = "1";
       if (id === "phone" && !validators.phone(input.value)) input.value = normalizePhone(input.value);
       validateField(id);
     });
-    // Once a field is flagged, re-check on every keystroke so the error clears as soon as it's fixed
-    input.addEventListener("input", () => { if (input.classList.contains("invalid")) validateField(id); });
+    // Instant feedback: turns green the moment the value is valid;
+    // errors only appear after the field was left once (or was already flagged), so typing is never nagged.
+    input.addEventListener("input", () => {
+      const msg = validators[id](input.value);
+      if (!msg) paintField(id, "", true);
+      else if (input.dataset.touched || input.closest(".field").classList.contains("is-invalid")) paintField(id, msg, false);
+      else paintField(id, "", false);
+    });
   });
 
   /* ------------------------------------------------------------------ */
@@ -249,7 +340,7 @@
     const wait = Math.max(0, lastCall + 1100 - Date.now());
     lastCall = Date.now() + wait;
     if (wait) await new Promise((r) => setTimeout(r, wait));
-    const res = await fetch(`${NOMINATIM}${path}&accept-language=en,el`, { signal });
+    const res = await fetch(`${NOMINATIM}${path}&accept-language=el,en`, { signal });
     if (!res.ok) throw new Error("geocoder");
     return res.json();
   }
@@ -257,39 +348,52 @@
   const shortName = (displayName) => displayName.split(",").slice(0, 4).map((s) => s.trim()).join(", ");
 
   function initMap() {
-    if (map) { setTimeout(() => map.invalidateSize(), 50); return; }
+    if (map) { setTimeout(() => map.invalidateSize(), 60); return; }
     map = L.map("map", {
-      center: ATHENS.center, zoom: ATHENS.zoom, minZoom: 9,
+      center: ATHENS.center, zoom: ATHENS.zoom, minZoom: 9, zoomSnap: 0.5,
       maxBounds: [[ATHENS.south - 0.3, ATHENS.west - 0.3], [ATHENS.north + 0.3, ATHENS.east + 0.3]],
     });
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">Συνεισφέροντες OpenStreetMap</a>',
     }).addTo(map);
     map.on("click", (e) => setPoint(mode(), e.latlng));
-    setTimeout(() => map.invalidateSize(), 50);
+    setTimeout(() => map.invalidateSize(), 60);
   }
 
   function placePin(kind, latlng) {
     if (pins[kind]) { pins[kind].setLatLng(latlng); return; }
     const icon = L.divIcon({
-      className: `pin pin-${kind}`, html: `<span>${kind === "pickup" ? "P" : "R"}</span>`,
-      iconSize: [30, 30], iconAnchor: [15, 15],
+      className: `pin pin-${kind}`, html: `<span>${kind === "pickup" ? "Π" : "Ε"}</span>`,
+      iconSize: [32, 32], iconAnchor: [16, 16],
     });
-    pins[kind] = L.marker(latlng, { icon, draggable: true, title: kind === "pickup" ? "Pickup" : "Return" }).addTo(map);
+    pins[kind] = L.marker(latlng, { icon, draggable: true, title: kind === "pickup" ? "Παραλαβή" : "Επιστροφή" }).addTo(map);
     pins[kind].on("dragend", () => setPoint(kind, pins[kind].getLatLng()));
+  }
+
+  // Smoothly frame the pins: both -> fit them, one -> fly to it.
+  function frame(latlng) {
+    if (reduceMotion) { map.setView(latlng, Math.max(map.getZoom(), 14)); return; }
+    if (pins.pickup && pins.return) {
+      const b = L.latLngBounds([pins.pickup.getLatLng(), pins.return.getLatLng()]);
+      if (b.getSouthWest().equals(b.getNorthEast())) map.flyTo(latlng, 15, { duration: 0.8 });
+      else map.flyToBounds(b, { padding: [60, 60], maxZoom: 15, duration: 0.9 });
+    } else {
+      map.flyTo(latlng, Math.max(map.getZoom(), 14.5), { duration: 0.8 });
+    }
   }
 
   // Put a pin on the map and (unless a label is given) look up its address name.
   async function setPoint(kind, latlng, label) {
-    if (!inAthens(latlng)) { mapMsg("Please choose a point inside the Athens area."); return; }
+    if (!inAthens(latlng)) { mapMsg("Επιλέξτε σημείο εντός της περιοχής της Αθήνας."); return; }
     initMap();
+    mapMsg("");
     placePin(kind, latlng);
-    map.panTo(latlng);
+    frame(latlng);
     const input = $(KINDS[kind]);
     if (label) setAddress(kind, label);
     else {
-      mapMsg("Finding the address…");
+      mapMsg("Αναζήτηση διεύθυνσης…");
       try {
         const r = await nominatim(`/reverse?format=jsonv2&zoom=18&lat=${latlng.lat}&lon=${latlng.lng}`);
         setAddress(kind, r && r.display_name ? shortName(r.display_name) : "");
@@ -299,6 +403,7 @@
       }
       mapMsg("");
     }
+    input.dataset.touched = "1";
     validateField(input.id);
   }
 
@@ -307,12 +412,12 @@
     if (kind === "pickup") syncReturn();
   }
 
-  // "Return to the same place" mirrors the pickup address and pin.
+  // "Επιστροφή στο ίδιο σημείο" mirrors the pickup address and pin.
   function syncReturn() {
     if (!$("sameAsPickup").checked) return;
     $("returnAddress").value = $("pickupAddress").value;
     if (pins.pickup) placePin("return", pins.pickup.getLatLng());
-    validateField("returnAddress", $("returnAddress").classList.contains("invalid"));
+    if ($("returnAddress").value.trim()) { $("returnAddress").dataset.touched = "1"; validateField("returnAddress"); }
   }
   $("sameAsPickup").addEventListener("change", (e) => {
     $("returnAddress").disabled = e.target.checked;
@@ -340,7 +445,7 @@
     const render = (items) => {
       list.innerHTML = "";
       if (!items.length) {
-        const li = document.createElement("li"); li.className = "none"; li.textContent = "No matches in Athens. You can still tap the map.";
+        const li = document.createElement("li"); li.className = "none"; li.textContent = "Δεν βρέθηκε αποτέλεσμα στην Αθήνα. Μπορείτε να πατήσετε στον χάρτη.";
         list.appendChild(li);
       }
       items.forEach((item) => {
@@ -362,7 +467,7 @@
         ctrl = new AbortController();
         try {
           const items = await nominatim(
-            `/search?format=jsonv2&limit=5&countrycodes=gr&viewbox=${VIEWBOX}&bounded=1&q=${encodeURIComponent(q + " Athens")}`,
+            `/search?format=jsonv2&limit=5&countrycodes=gr&viewbox=${VIEWBOX}&bounded=1&q=${encodeURIComponent(q + " Αθήνα")}`,
             ctrl.signal
           );
           render(items);
@@ -397,7 +502,7 @@
     if (firstBad) { $(firstBad[0]).focus(); return; }
 
     const submit = $("submitBtn");
-    submit.disabled = true; submit.textContent = "Sending…";
+    submit.disabled = true; submit.textContent = "Αποστολή…";
 
     // The server re-validates, re-checks availability and computes the final price itself.
     const { data, error } = await sb.rpc("create_booking", {
@@ -411,10 +516,10 @@
       p_return_address: $("returnAddress").value.trim(),
     });
 
-    submit.disabled = false; submit.textContent = "Send booking request";
+    submit.disabled = false; submit.textContent = "Αποστολή αιτήματος κράτησης";
     if (error) return showError($("bookingError"), friendlyError(error));
 
-    $("confirmRef").textContent = `Reference: ${String(data).slice(0, 8).toUpperCase()}`;
+    $("confirmRef").textContent = `Κωδικός κράτησης: ${String(data).slice(0, 8).toUpperCase()}`;
     goToStep(3);
   });
 
@@ -424,7 +529,7 @@
   $("newBookingBtn").addEventListener("click", () => {
     $("bookingForm").reset();
     $("returnAddress").disabled = false;
-    Object.keys(validators).forEach((id) => { $(id).classList.remove("invalid"); showError($(id + "-error"), ""); });
+    Object.keys(validators).forEach((id) => { delete $(id).dataset.touched; paintField(id, "", false); });
     Object.keys(pins).forEach((k) => { if (pins[k]) { pins[k].remove(); pins[k] = null; } });
     $("results").innerHTML = ""; $("resultsInfo").textContent = "";
     state.van = null;
