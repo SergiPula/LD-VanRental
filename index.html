@@ -1,172 +1,216 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="el">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Van Rentals Athens – Book your van online</title>
-  <meta name="description" content="Rent a camper, cargo or passenger van in Athens. Check live availability, choose pickup and return points on the map and send a booking request in minutes." />
+  <title>Ενοικίαση Βαν στην Αθήνα – Κράτηση online</title>
+  <meta name="description" content="Ενοικίαση κάμπερ, μεταφορικών και βαν για πολλά άτομα στην Αθήνα. Δείτε τη διαθεσιμότητα σε πραγματικό χρόνο, επιλέξτε σημεία παραλαβής και επιστροφής στον χάρτη και στείλτε αίτημα σε λίγα λεπτά." />
+  <meta name="theme-color" content="#071318" />
+  <script>document.documentElement.classList.add('js')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <!-- Manrope + Inter: both include the Greek alphabet -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
   <!-- ===== Header ===== -->
-  <header class="site-header">
-    <div class="wrap">
-      <a class="brand" href="#top" id="brandName">Van Rentals</a>
-      <nav class="nav" aria-label="Main">
-        <a href="#fleet">Our vans</a>
-        <a href="#how">How it works</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contact">Contact</a>
+  <header class="site-header" id="siteHeader">
+    <div class="wrap bar">
+      <a class="brand" href="#top">
+        <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M2 7h12v9H2zM14 10h4.5l3.500 3.500V16H14z"/><circle cx="7" cy="17.500" r="2.300" fill="currentColor" stroke="#071318" stroke-width="1.200"/><circle cx="17.500" cy="17.500" r="2.300" fill="currentColor" stroke="#071318" stroke-width="1.200"/></svg></span>
+        <span>Ενοικίαση Βαν Αθήνα</span>
+      </a>
+      <nav class="nav" id="mainNav" aria-label="Κύρια πλοήγηση">
+        <a href="#fleet">Ο στόλος μας</a>
+        <a href="#how">Πώς λειτουργεί</a>
+        <a href="#faq">Συχνές ερωτήσεις</a>
+        <a href="#contact">Επικοινωνία</a>
       </nav>
-      <a class="btn btn-sign btn-sm" href="#book">Book now</a>
+      <div class="bar-actions">
+        <a class="btn btn-gold btn-sm" href="#book">Κράτηση</a>
+        <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Άνοιγμα μενού"><span></span><span></span><span></span></button>
+      </div>
     </div>
   </header>
 
   <main id="top">
     <!-- ===== Hero ===== -->
     <section class="hero">
-      <div class="wrap">
-        <h1>Pick your dates.<br />We’ll show the vans that are free.</h1>
-        <p>Campers, cargo vans and people carriers in Athens. Choose your pickup and return points on the map and send your request in a few minutes.</p>
-        <div class="hero-cta">
-          <a class="btn btn-sign" href="#book">Check availability</a>
-          <a class="btn btn-ghost js-wa" href="#contact" target="_blank" rel="noopener">Chat on WhatsApp</a>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" data-reveal>Ενοικίαση βαν στην Αθήνα</p>
+          <h1 data-reveal style="--i:1">Το κατάλληλο βαν<br />για κάθε <em>διαδρομή</em>.</h1>
+          <p class="lead" data-reveal style="--i:2">Κάμπερ, μεταφορικά και βαν για πολλά άτομα. Δείτε σε πραγματικό χρόνο ποια είναι ελεύθερα, ορίστε στον χάρτη πού θα το παραλάβετε και στείλτε το αίτημά σας σε λίγα λεπτά.</p>
+          <div class="hero-cta" data-reveal style="--i:3">
+            <a class="btn btn-gold" href="#book">Έλεγχος διαθεσιμότητας</a>
+            <a class="btn btn-ghost js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
+          </div>
+          <ul class="chips" data-reveal style="--i:4">
+            <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
+            <li>Σημεία στον χάρτη της Αθήνας</li>
+            <li>Χωρίς πληρωμή online</li>
+          </ul>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <svg viewBox="0 0 520 300" class="van-svg">
+            <defs><linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9dde1"/></linearGradient></defs>
+            <ellipse cx="260" cy="268" rx="215" ry="10" fill="rgba(0,0,0,.4)"/>
+            <g class="van-body">
+              <path d="M60 232V92a20 20 0 0 1 20-20h250c22 0 38 8 50 24l56 62c8 9 12 18 12 30v44a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10z" fill="url(#bodyG)"/>
+              <path d="M338 90h8c10 0 18 4 24 11l46 52H338z" fill="#0f4c5c"/>
+              <rect x="60" y="178" width="386" height="12" fill="#f2b53c"/>
+              <rect x="436" y="198" width="12" height="14" rx="3" fill="#ffd06b"/>
+              <circle cx="150" cy="242" r="40" fill="#071318"/><circle cx="380" cy="242" r="40" fill="#071318"/>
+              <g class="wheel"><circle cx="150" cy="242" r="30" fill="#0c1a21"/><circle cx="150" cy="242" r="13" fill="#c9dde1"/><path d="M150 214v56M122 242h56" stroke="#5b6a72" stroke-width="3"/></g>
+              <g class="wheel"><circle cx="380" cy="242" r="30" fill="#0c1a21"/><circle cx="380" cy="242" r="13" fill="#c9dde1"/><path d="M380 214v56M352 242h56" stroke="#5b6a72" stroke-width="3"/></g>
+            </g>
+            <path class="road" d="M0 282H520" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-dasharray="26 22"/>
+          </svg>
         </div>
       </div>
     </section>
 
-    <!-- ===== Booking wizard (3 steps) ===== -->
+    <!-- ===== Booking wizard ===== -->
     <section id="book" class="wrap">
-      <ol class="stepper" aria-label="Booking progress">
-        <li data-step="1" class="active">Choose a van</li>
-        <li data-step="2">Your details</li>
-        <li data-step="3">Done</li>
-      </ol>
+      <div class="book-card" data-reveal>
+        <ol class="stepper" aria-label="Πρόοδος κράτησης">
+          <li data-step="1" class="active"><span class="n">1</span><span class="t">Επιλογή βαν</span></li>
+          <li data-step="2"><span class="n">2</span><span class="t">Τα στοιχεία σας</span></li>
+          <li data-step="3"><span class="n">3</span><span class="t">Ολοκλήρωση</span></li>
+        </ol>
 
-      <!-- STEP 1 -->
-      <div id="step1" class="panel">
-        <form id="searchForm" class="search-bar" novalidate>
-          <label>Pickup date
-            <input type="date" id="startDate" required />
-          </label>
-          <label>Return date
-            <input type="date" id="endDate" required />
-          </label>
-          <label>Van type
-            <select id="categoryFilter"><option value="">All types</option></select>
-          </label>
-          <button type="submit" class="btn btn-primary">Check availability</button>
-        </form>
-        <p id="searchError" class="error" role="alert" hidden></p>
-        <p id="resultsInfo" class="muted" aria-live="polite"></p>
-        <div id="results" class="grid"></div>
-      </div>
-
-      <!-- STEP 2 -->
-      <div id="step2" class="panel" hidden>
-        <button type="button" id="backBtn" class="link-btn">← Back to vans</button>
-        <div class="booking-layout">
-          <form id="bookingForm" novalidate>
-            <h2>Your details</h2>
-
-            <label for="fullName">Full name
-              <input id="fullName" autocomplete="name" aria-describedby="fullName-error" />
+        <!-- STEP 1 -->
+        <div id="step1" class="panel">
+          <form id="searchForm" class="search-bar" novalidate>
+            <label>Ημερομηνία παραλαβής
+              <input type="date" id="startDate" required />
             </label>
-            <p class="field-error" id="fullName-error" hidden></p>
-
-            <label for="email">Email
-              <input id="email" type="email" inputmode="email" autocomplete="email" placeholder="name@example.com" aria-describedby="email-error" />
+            <label>Ημερομηνία επιστροφής
+              <input type="date" id="endDate" required />
             </label>
-            <p class="field-error" id="email-error" hidden></p>
-
-            <label for="phone">Phone / WhatsApp
-              <input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+30 69X XXX XXXX" aria-describedby="phone-hint phone-error" />
+            <label>Τύπος βαν
+              <select id="categoryFilter"><option value="">Όλοι οι τύποι</option></select>
             </label>
-            <p class="hint" id="phone-hint">Include the country code if you’re outside Greece.</p>
-            <p class="field-error" id="phone-error" hidden></p>
-
-            <h2 class="form-sub">Pickup &amp; return</h2>
-            <p class="hint">Type an address in the Athens area and pick a suggestion, or tap the map. Drag a pin to fine-tune.</p>
-
-            <div class="loc-field">
-              <label for="pickupAddress">Pickup address
-                <input id="pickupAddress" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="pickupAddress-list" aria-autocomplete="list" aria-describedby="pickupAddress-error" />
-              </label>
-              <ul class="suggest" id="pickupAddress-list" role="listbox" hidden></ul>
-            </div>
-            <p class="field-error" id="pickupAddress-error" hidden></p>
-
-            <div class="loc-field">
-              <label for="returnAddress">Return address
-                <input id="returnAddress" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="returnAddress-list" aria-autocomplete="list" aria-describedby="returnAddress-error" />
-              </label>
-              <ul class="suggest" id="returnAddress-list" role="listbox" hidden></ul>
-            </div>
-            <p class="field-error" id="returnAddress-error" hidden></p>
-
-            <label class="check-row"><input type="checkbox" id="sameAsPickup" /> Return to the same place as pickup</label>
-
-            <fieldset class="mode">
-              <legend>Tapping the map sets the…</legend>
-              <label><input type="radio" name="mapMode" value="pickup" checked /><span>Pickup point</span></label>
-              <label><input type="radio" name="mapMode" value="return" /><span>Return point</span></label>
-            </fieldset>
-            <div class="map-wrap"><div id="map" role="application" aria-label="Map of Athens to choose pickup and return points"></div></div>
-            <p class="hint" id="mapMsg" aria-live="polite"></p>
-
-            <!-- Honeypot: hidden from humans, bots fill it in -->
-            <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
-            <p id="bookingError" class="error" role="alert" hidden></p>
-            <button type="submit" id="submitBtn" class="btn btn-primary">Send booking request</button>
+            <button type="submit" class="btn btn-primary">Έλεγχος διαθεσιμότητας</button>
           </form>
-
-          <aside class="summary" aria-label="Booking summary">
-            <h2>Summary</h2>
-            <img id="sumImg" alt="" />
-            <p class="sum-name" id="sumName"></p>
-            <dl>
-              <dt>Pickup</dt><dd id="sumStart"></dd>
-              <dt>Return</dt><dd id="sumEnd"></dd>
-              <dt>Days</dt><dd id="sumDays"></dd>
-              <dt>Price per day</dt><dd id="sumRate"></dd>
-            </dl>
-            <p class="total"><span>Total</span><strong id="sumTotal"></strong></p>
-          </aside>
+          <p id="searchError" class="error" role="alert" hidden></p>
+          <p id="resultsInfo" class="results-info" aria-live="polite"></p>
+          <div id="results" class="grid"></div>
         </div>
-      </div>
 
-      <!-- STEP 3 -->
-      <div id="step3" class="panel confirm" hidden>
-        <div class="check" aria-hidden="true">✓</div>
-        <h2>Thank you!</h2>
-        <p>Your booking request has been submitted. We will contact you shortly.</p>
-        <p class="muted" id="confirmRef"></p>
-        <button type="button" id="newBookingBtn" class="btn btn-primary">Make another booking</button>
+        <!-- STEP 2 -->
+        <div id="step2" class="panel" hidden>
+          <button type="button" id="backBtn" class="link-btn">← Επιστροφή στα βαν</button>
+          <div class="booking-layout">
+            <form id="bookingForm" novalidate>
+              <h2>Τα στοιχεία σας</h2>
+
+              <div class="field">
+                <label for="fullName">Ονοματεπώνυμο</label>
+                <div class="control"><input id="fullName" autocomplete="name" placeholder="π.χ. Γιώργος Παπαδόπουλος" aria-describedby="fullName-error" /></div>
+                <p class="field-msg" id="fullName-error" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="email">Email</label>
+                <div class="control"><input id="email" type="email" inputmode="email" autocomplete="email" placeholder="onoma@example.com" aria-describedby="email-error" /></div>
+                <p class="field-msg" id="email-error" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="phone">Τηλέφωνο / WhatsApp</label>
+                <div class="control"><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="+30 69X XXX XXXX" aria-describedby="phone-hint phone-error" /></div>
+                <p class="hint" id="phone-hint">Αν καλείτε από το εξωτερικό, προσθέστε τον κωδικό χώρας.</p>
+                <p class="field-msg" id="phone-error" hidden></p>
+              </div>
+
+              <h2 class="form-sub">Παραλαβή &amp; επιστροφή</h2>
+              <p class="hint">Γράψτε μια διεύθυνση στην Αθήνα και διαλέξτε πρόταση ή πατήστε στον χάρτη. Μπορείτε να σύρετε τις πινέζες για πιο ακριβή θέση.</p>
+
+              <div class="field">
+                <label for="pickupAddress">Διεύθυνση παραλαβής</label>
+                <div class="control">
+                  <input id="pickupAddress" autocomplete="off" placeholder="π.χ. Πλατεία Συντάγματος" role="combobox" aria-expanded="false" aria-controls="pickupAddress-list" aria-autocomplete="list" aria-describedby="pickupAddress-error" />
+                  <ul class="suggest" id="pickupAddress-list" role="listbox" hidden></ul>
+                </div>
+                <p class="field-msg" id="pickupAddress-error" hidden></p>
+              </div>
+
+              <div class="field">
+                <label for="returnAddress">Διεύθυνση επιστροφής</label>
+                <div class="control">
+                  <input id="returnAddress" autocomplete="off" placeholder="π.χ. Πειραιάς, Λιμάνι" role="combobox" aria-expanded="false" aria-controls="returnAddress-list" aria-autocomplete="list" aria-describedby="returnAddress-error" />
+                  <ul class="suggest" id="returnAddress-list" role="listbox" hidden></ul>
+                </div>
+                <p class="field-msg" id="returnAddress-error" hidden></p>
+              </div>
+
+              <label class="check-row"><input type="checkbox" id="sameAsPickup" /> Επιστροφή στο ίδιο σημείο με την παραλαβή</label>
+
+              <fieldset class="mode">
+                <legend>Με το πάτημα στον χάρτη ορίζεται το…</legend>
+                <label><input type="radio" name="mapMode" value="pickup" checked /><span>Σημείο παραλαβής</span></label>
+                <label><input type="radio" name="mapMode" value="return" /><span>Σημείο επιστροφής</span></label>
+              </fieldset>
+              <div class="map-wrap"><div id="map" role="application" aria-label="Χάρτης της Αθήνας για επιλογή σημείων παραλαβής και επιστροφής"></div></div>
+              <p class="hint" id="mapMsg" aria-live="polite"></p>
+
+              <!-- Honeypot: hidden from humans, bots fill it in -->
+              <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+              <p id="bookingError" class="error" role="alert" hidden></p>
+              <button type="submit" id="submitBtn" class="btn btn-gold btn-block">Αποστολή αιτήματος κράτησης</button>
+            </form>
+
+            <aside class="summary" aria-label="Σύνοψη κράτησης">
+              <h2>Σύνοψη</h2>
+              <img id="sumImg" alt="" />
+              <p class="sum-name" id="sumName"></p>
+              <dl>
+                <dt>Παραλαβή</dt><dd id="sumStart"></dd>
+                <dt>Επιστροφή</dt><dd id="sumEnd"></dd>
+                <dt>Ημέρες</dt><dd id="sumDays"></dd>
+                <dt>Τιμή ανά ημέρα</dt><dd id="sumRate"></dd>
+              </dl>
+              <p class="total"><span>Σύνολο</span><strong id="sumTotal"></strong></p>
+              <p class="fine">Δεν γίνεται πληρωμή τώρα. Θα επικοινωνήσουμε μαζί σας για την επιβεβαίωση.</p>
+            </aside>
+          </div>
+        </div>
+
+        <!-- STEP 3 -->
+        <div id="step3" class="panel confirm" hidden>
+          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#f2b53c" stroke-width="3"/><path d="M15 27l8 8 14-16" fill="none" stroke="#0c1a21" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h2>Ευχαριστούμε!</h2>
+          <p>Το αίτημα κράτησής σας υποβλήθηκε. Θα επικοινωνήσουμε μαζί σας σύντομα.</p>
+          <p class="muted" id="confirmRef"></p>
+          <button type="button" id="newBookingBtn" class="btn btn-primary">Νέα κράτηση</button>
+        </div>
       </div>
     </section>
 
     <!-- ===== Fleet ===== -->
     <section id="fleet" class="section">
       <div class="wrap">
-        <h2>Our vans</h2>
-        <p class="section-lead">Every van on this list can be booked online. Pick your dates to see which are free.</p>
+        <p class="eyebrow dark" data-reveal>Ο στόλος μας</p>
+        <h2 data-reveal style="--i:1">Βαν για κάθε ανάγκη</h2>
+        <p class="section-lead" data-reveal style="--i:2">Όλα τα βαν της λίστας μπορούν να κρατηθούν online. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα.</p>
         <div id="fleetGrid" class="grid"></div>
       </div>
     </section>
 
     <!-- ===== How it works ===== -->
-    <section id="how" class="section section-alt">
+    <section id="how" class="section section-dark">
       <div class="wrap">
-        <h2>How it works</h2>
+        <p class="eyebrow" data-reveal>Πώς λειτουργεί</p>
+        <h2 data-reveal style="--i:1">Τέσσερα απλά βήματα</h2>
         <ol class="how">
-          <li><strong>Choose dates and a van</strong><span>Only vans that are free for your whole trip are shown.</span></li>
-          <li><strong>Send your request</strong><span>Add your details and mark the pickup and return points on the map.</span></li>
-          <li><strong>We confirm with you</strong><span>We contact you by phone or email to confirm the booking.</span></li>
-          <li><strong>Pick up the keys</strong><span>Bring your driver’s license. We check it in person at pickup.</span></li>
+          <li data-reveal style="--i:1"><strong>Επιλέξτε ημερομηνίες και βαν</strong><span>Βλέπετε μόνο τα βαν που είναι ελεύθερα για όλη τη διάρκεια της διαδρομής σας.</span></li>
+          <li data-reveal style="--i:2"><strong>Στείλτε το αίτημά σας</strong><span>Συμπληρώστε τα στοιχεία σας και ορίστε στον χάρτη τα σημεία παραλαβής και επιστροφής.</span></li>
+          <li data-reveal style="--i:3"><strong>Επιβεβαιώνουμε μαζί σας</strong><span>Επικοινωνούμε τηλεφωνικά ή με email για να κλείσουμε την κράτηση.</span></li>
+          <li data-reveal style="--i:4"><strong>Παραλάβετε το βαν</strong><span>Φέρτε το δίπλωμά σας. Τον έλεγχο τον κάνουμε αυτοπροσώπως κατά την παραλαβή.</span></li>
         </ol>
       </div>
     </section>
@@ -174,12 +218,13 @@
     <!-- ===== Why us ===== -->
     <section class="section">
       <div class="wrap">
-        <h2>Why rent with us</h2>
+        <p class="eyebrow dark" data-reveal>Γιατί εμάς</p>
+        <h2 data-reveal style="--i:1">Απλά, καθαρά, χωρίς εκπλήξεις</h2>
         <div class="perks">
-          <div><strong>Live availability</strong><p>No back-and-forth: you see exactly which vans are free.</p></div>
-          <div><strong>Clear total price</strong><p>Price per day × number of days, shown before you send anything.</p></div>
-          <div><strong>Your pickup, your return</strong><p>Choose where the van meets you and where you leave it in Athens.</p></div>
-          <div><strong>A real person replies</strong><p>Reach us on WhatsApp or email any time with questions.</p></div>
+          <div data-reveal style="--i:1"><strong>Ζωντανή διαθεσιμότητα</strong><p>Χωρίς τηλέφωνα και αναμονή: βλέπετε αμέσως ποια βαν είναι ελεύθερα.</p></div>
+          <div data-reveal style="--i:2"><strong>Σαφές συνολικό κόστος</strong><p>Τιμή ανά ημέρα × αριθμός ημερών, πριν στείλετε οτιδήποτε.</p></div>
+          <div data-reveal style="--i:3"><strong>Παραλαβή και επιστροφή όπου θέλετε</strong><p>Επιλέξτε στον χάρτη πού θα βρεθούμε και πού θα αφήσετε το βαν στην Αθήνα.</p></div>
+          <div data-reveal style="--i:4"><strong>Απαντά πάντα άνθρωπος</strong><p>Μιλήστε μαζί μας στο WhatsApp ή με email για ό,τι χρειάζεστε.</p></div>
         </div>
       </div>
     </section>
@@ -187,13 +232,14 @@
     <!-- ===== FAQ ===== -->
     <section id="faq" class="section section-alt">
       <div class="wrap">
-        <h2>Questions</h2>
+        <p class="eyebrow dark" data-reveal>Συχνές ερωτήσεις</p>
+        <h2 data-reveal style="--i:1">Έχετε απορίες;</h2>
         <div class="faq">
-          <details><summary>Do I pay when I send the request?</summary><p>No. A request is not a payment. We contact you first to confirm availability and the details.</p></details>
-          <details><summary>How are rental days counted?</summary><p>Both the pickup day and the return day count. For example, 10 June to 12 June is 3 days.</p></details>
-          <details><summary>Which area do you cover?</summary><p>Pickup and return addresses are in the Athens area. Need something else? Message us and we’ll see what’s possible.</p></details>
-          <details><summary>What do I need at pickup?</summary><p>A valid driver’s license. We check it in person, so you don’t upload anything online.</p></details>
-          <details><summary>Can I change or cancel a request?</summary><p>Yes, just contact us by WhatsApp or email with your name and dates.</p></details>
+          <details data-reveal><summary>Πληρώνω όταν στέλνω το αίτημα;</summary><p>Όχι. Το αίτημα δεν είναι πληρωμή. Πρώτα επικοινωνούμε μαζί σας για να επιβεβαιώσουμε τη διαθεσιμότητα και τις λεπτομέρειες.</p></details>
+          <details data-reveal style="--i:1"><summary>Πώς υπολογίζονται οι ημέρες ενοικίασης;</summary><p>Μετράνε και η ημέρα παραλαβής και η ημέρα επιστροφής. Για παράδειγμα, από 10 έως 12 Ιουνίου υπολογίζονται 3 ημέρες.</p></details>
+          <details data-reveal style="--i:2"><summary>Ποια περιοχή καλύπτετε;</summary><p>Οι διευθύνσεις παραλαβής και επιστροφής πρέπει να είναι στην περιοχή της Αθήνας. Χρειάζεστε κάτι διαφορετικό; Στείλτε μας μήνυμα και θα το δούμε μαζί.</p></details>
+          <details data-reveal style="--i:3"><summary>Τι χρειάζομαι κατά την παραλαβή;</summary><p>Ένα έγκυρο δίπλωμα οδήγησης. Το ελέγχουμε αυτοπροσώπως, οπότε δεν χρειάζεται να ανεβάσετε τίποτα online.</p></details>
+          <details data-reveal style="--i:4"><summary>Μπορώ να αλλάξω ή να ακυρώσω ένα αίτημα;</summary><p>Ναι. Επικοινωνήστε μαζί μας στο WhatsApp ή με email και πείτε μας το όνομά σας και τις ημερομηνίες.</p></details>
         </div>
       </div>
     </section>
@@ -201,30 +247,30 @@
     <!-- ===== Contact ===== -->
     <section id="contact" class="section">
       <div class="wrap">
-        <div class="contact">
+        <div class="contact" data-reveal>
           <div>
-            <h2>Talk to us directly</h2>
-            <p>Questions before you book, a special route, or a last-minute request? Write to us.</p>
+            <h2>Μιλήστε μαζί μας απευθείας</h2>
+            <p>Ερώτηση πριν την κράτηση, ειδική διαδρομή ή αίτημα της τελευταίας στιγμής; Γράψτε μας.</p>
           </div>
           <div class="contact-actions">
-            <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">WhatsApp us</a>
-            <a class="btn btn-sign js-mail" href="#contact">Email us</a>
+            <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
+            <a class="btn btn-gold js-mail" href="#contact">Στείλτε email</a>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="wrap">© <span id="year"></span> Van Rentals · Athens, Greece</div></footer>
+  <footer class="site-footer"><div class="wrap">© <span id="year"></span> Ενοικίαση Βαν Αθήνα · Αθήνα, Ελλάδα</div></footer>
 
   <!-- Floating contact buttons -->
   <div class="fab-wrap">
-    <a class="fab fab-wa js-wa" href="#contact" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
+    <a class="fab fab-wa js-wa" href="#contact" target="_blank" rel="noopener" aria-label="Συνομιλία στο WhatsApp">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <a class="fab fab-mail js-mail" href="#contact" aria-label="Send an email">
-      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.400l-8 5-8-5z"/></svg>
+    <a class="fab fab-mail js-mail" href="#contact" aria-label="Αποστολή email">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1 2.4V17h16V7.4l-8 5-8-5z"/></svg>
       <span>Email</span>
     </a>
   </div>
