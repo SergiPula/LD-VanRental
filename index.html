@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ενοικίαση Βαν στην Αθήνα – Κράτηση online</title>
-  <meta name="description" content="Ενοικίαση βαν στην Αθήνα με ζωντανή διαθεσιμότητα. Διαλέξτε ημερομηνίες, ορίστε σημεία παραλαβής και επιστροφής στον χάρτη και στείλτε αίτημα σε λίγα λεπτά." />
-  <meta name="theme-color" content="#0f1412" />
+  <title>Ενοικίαση Επαγγελματικών Βαν στην Αθήνα – Κράτηση online</title>
+  <meta name="description" content="Ενοικίαση επαγγελματικών βαν στην Αθήνα για εργοτάξια, συνεργεία και τεχνικές εταιρείες. Μεταφορά υλικών, εργαλείων και εξοπλισμού, με διαθεσιμότητα σε πραγματικό χρόνο." />
+  <meta name="theme-color" content="#14171a" />
   <script>document.documentElement.classList.add('js')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-  <!-- Noto Serif Display (headings) + Inter (body): both include the Greek alphabet -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+  <!-- Roboto Condensed (headings) + Inter (body): both include the Greek alphabet -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Condensed:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -22,37 +22,42 @@
       <a class="brand" href="#top"><span class="logo" aria-hidden="true"></span><span>Ενοικίαση Βαν Αθήνα</span></a>
       <nav class="nav" id="mainNav" aria-label="Κύρια πλοήγηση">
         <a href="#fleet">Ο στόλος μας</a>
+        <a href="#uses">Επαγγελματική χρήση</a>
         <a href="#how">Πώς λειτουργεί</a>
         <a href="#faq">Συχνές ερωτήσεις</a>
         <a href="#contact">Επικοινωνία</a>
       </nav>
       <div class="bar-actions">
-        <a class="btn btn-glow btn-sm" href="#book">Κράτηση</a>
+        <a class="btn btn-accent btn-sm" href="#book">Κράτηση</a>
         <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Άνοιγμα μενού"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
 
   <main id="top">
-    <!-- ===== Hero (photo) ===== -->
+    <!-- ===== Compact hero: text + small framed photo ===== -->
     <section class="hero">
-      <!-- PHOTO 1: hero background. Replace the URL to change it. -->
-      <div class="hero-media" aria-hidden="true">
-        <img data-photo src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=2000&q=70" alt="" fetchpriority="high" />
-      </div>
-      <div class="wrap hero-copy">
-        <p class="eyebrow" data-reveal>Ενοικίαση βαν στην Αθήνα</p>
-        <h1 data-reveal style="--i:1">Ταξιδέψτε με<br />τον <em>δικό σας ρυθμό</em>.</h1>
-        <p class="lead" data-reveal style="--i:2">Ζωντανή διαθεσιμότητα, καθαρή τιμή και παραλαβή εκεί που σας βολεύει. Διαλέξτε ημερομηνίες, ορίστε στον χάρτη πού θα βρεθούμε και στείλτε το αίτημά σας σε λίγα λεπτά.</p>
-        <div class="hero-cta" data-reveal style="--i:3">
-          <a class="btn btn-glow" href="#book">Έλεγχος διαθεσιμότητας</a>
-          <a class="btn btn-glass js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow" data-reveal>Ενοικίαση επαγγελματικών βαν · Αθήνα</p>
+          <h1 data-reveal style="--i:1">Επαγγελματικά βαν<br /><em>για κάθε εργοτάξιο</em>.</h1>
+          <p class="lead" data-reveal style="--i:2">Μεταφέρετε υλικά, εργαλεία και εξοπλισμό με αξιόπιστα βαν για συνεργεία, εργολάβους και τεχνικές εταιρείες. Δείτε τη διαθεσιμότητα σε πραγματικό χρόνο και στείλτε το αίτημά σας σε λίγα λεπτά.</p>
+          <div class="hero-cta" data-reveal style="--i:3">
+            <a class="btn btn-accent" href="#book">Έλεγχος διαθεσιμότητας</a>
+            <a class="btn btn-outline js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
+          </div>
+          <ul class="chips" data-reveal style="--i:4">
+            <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
+            <li>Σημεία στον χάρτη της Αθήνας</li>
+            <li>Χωρίς πληρωμή online</li>
+          </ul>
         </div>
-        <ul class="chips" data-reveal style="--i:4">
-          <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
-          <li>Σημεία στον χάρτη της Αθήνας</li>
-          <li>Χωρίς πληρωμή online</li>
-        </ul>
+
+        <!-- PHOTO 1 (replace the URL to change it) -->
+        <figure class="frame hero-photo" data-reveal style="--i:2">
+          <img data-photo src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=900&q=70" alt="" fetchpriority="high" />
+          <figcaption class="glass-tag">Για επαγγελματική χρήση</figcaption>
+        </figure>
       </div>
     </section>
 
@@ -112,12 +117,12 @@
               </div>
 
               <h2 class="form-sub">Παραλαβή &amp; επιστροφή</h2>
-              <p class="hint">Γράψτε μια διεύθυνση στην Αθήνα και διαλέξτε πρόταση ή πατήστε στον χάρτη. Μπορείτε να σύρετε τις πινέζες για πιο ακριβή θέση.</p>
+              <p class="hint">Γράψτε μια διεύθυνση στην Αθήνα (αποθήκη, γραφείο ή εργοτάξιο) και διαλέξτε πρόταση ή πατήστε στον χάρτη. Μπορείτε να σύρετε τις πινέζες για πιο ακριβή θέση.</p>
 
               <div class="field">
                 <label for="pickupAddress">Διεύθυνση παραλαβής</label>
                 <div class="control">
-                  <input id="pickupAddress" autocomplete="off" placeholder="π.χ. Πλατεία Συντάγματος" role="combobox" aria-expanded="false" aria-controls="pickupAddress-list" aria-autocomplete="list" aria-describedby="pickupAddress-error" />
+                  <input id="pickupAddress" autocomplete="off" placeholder="π.χ. Αποθήκη εταιρείας, Αθήνα" role="combobox" aria-expanded="false" aria-controls="pickupAddress-list" aria-autocomplete="list" aria-describedby="pickupAddress-error" />
                   <ul class="suggest" id="pickupAddress-list" role="listbox" hidden></ul>
                 </div>
                 <p class="field-msg" id="pickupAddress-error" hidden></p>
@@ -126,7 +131,7 @@
               <div class="field">
                 <label for="returnAddress">Διεύθυνση επιστροφής</label>
                 <div class="control">
-                  <input id="returnAddress" autocomplete="off" placeholder="π.χ. Πειραιάς, Λιμάνι" role="combobox" aria-expanded="false" aria-controls="returnAddress-list" aria-autocomplete="list" aria-describedby="returnAddress-error" />
+                  <input id="returnAddress" autocomplete="off" placeholder="π.χ. Εργοτάξιο, Πειραιάς" role="combobox" aria-expanded="false" aria-controls="returnAddress-list" aria-autocomplete="list" aria-describedby="returnAddress-error" />
                   <ul class="suggest" id="returnAddress-list" role="listbox" hidden></ul>
                 </div>
                 <p class="field-msg" id="returnAddress-error" hidden></p>
@@ -145,7 +150,7 @@
               <!-- Honeypot: hidden from humans, bots fill it in -->
               <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
               <p id="bookingError" class="error" role="alert" hidden></p>
-              <button type="submit" id="submitBtn" class="btn btn-glow btn-block">Αποστολή αιτήματος κράτησης</button>
+              <button type="submit" id="submitBtn" class="btn btn-accent btn-block">Αποστολή αιτήματος κράτησης</button>
             </form>
 
             <aside class="summary" aria-label="Σύνοψη κράτησης">
@@ -166,7 +171,7 @@
 
         <!-- STEP 3 -->
         <div id="step3" class="panel confirm" hidden>
-          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#c4623f" stroke-width="3"/><path d="M15 27l8 8 14-16" fill="none" stroke="#1d3a2c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#ffb400" stroke-width="3"/><path d="M15 27l8 8 14-16" fill="none" stroke="#14171a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h2>Ευχαριστούμε!</h2>
           <p>Το αίτημα κράτησής σας υποβλήθηκε. Θα επικοινωνήσουμε μαζί σας σύντομα.</p>
           <p class="muted" id="confirmRef"></p>
@@ -179,23 +184,22 @@
     <section id="fleet" class="section">
       <div class="wrap">
         <p class="eyebrow dark" data-reveal>Ο στόλος μας</p>
-        <h2 data-reveal style="--i:1">Βαν για κάθε ταξίδι</h2>
-        <p class="section-lead" data-reveal style="--i:2">Όλα τα βαν της λίστας μπορούν να κρατηθούν online. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα.</p>
+        <h2 data-reveal style="--i:1">Βαν για επαγγελματική χρήση</h2>
+        <p class="section-lead" data-reveal style="--i:2">Όλα τα βαν της λίστας μπορούν να κρατηθούν online. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα για τη δουλειά σας.</p>
         <div id="fleetGrid" class="grid"></div>
       </div>
     </section>
 
-    <!-- ===== PHOTO 2: atmospheric band ===== -->
-    <section class="section tight" aria-labelledby="bandTitle">
+    <!-- ===== Professional uses ===== -->
+    <section id="uses" class="section section-white">
       <div class="wrap">
-        <div class="band" data-reveal>
-          <img class="band-img" data-photo data-parallax src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=70" alt="" loading="lazy" />
-          <div class="band-inner glass-dark">
-            <p class="eyebrow">Έτοιμοι για αναχώρηση</p>
-            <h2 id="bandTitle">Η διαδρομή είναι μέρος του ταξιδιού.</h2>
-            <p>Σχεδιάστε την απόδραση, τη μετακόμιση ή το οικογενειακό σας ταξίδι. Εμείς φροντίζουμε να έχετε το κατάλληλο όχημα, στο σημείο που σας βολεύει.</p>
-            <a class="btn btn-glow" href="#book">Δείτε τη διαθεσιμότητα</a>
-          </div>
+        <p class="eyebrow dark" data-reveal>Επαγγελματική χρήση</p>
+        <h2 data-reveal style="--i:1">Φτιαγμένα για τη δουλειά στο εργοτάξιο</h2>
+        <div class="uses">
+          <article class="use" data-reveal style="--i:1"><span class="tag-n">01</span><h3>Μεταφορά υλικών</h3><p>Σακιά, σωληνώσεις, ξυλεία, πλακάκια και ό,τι χρειάζεται το έργο σας φτάνει εγκαίρως στον χώρο εργασίας.</p></article>
+          <article class="use" data-reveal style="--i:2"><span class="tag-n">02</span><h3>Εργαλεία και εξοπλισμός</h3><p>Μετακινήστε εργαλεία, μηχανήματα χειρός και εξοπλισμό με χώρο φόρτωσης για την καθημερινή δουλειά.</p></article>
+          <article class="use" data-reveal style="--i:3"><span class="tag-n">03</span><h3>Συνεργεία και ομάδες</h3><p>Μεταφέρετε το συνεργείο σας και τον εξοπλισμό του από και προς τα εργοτάξια.</p></article>
+          <article class="use" data-reveal style="--i:4"><span class="tag-n">04</span><h3>Έργα με πρόγραμμα</h3><p>Κλείστε βαν για όσες ημέρες χρειάζεται το έργο σας, με σαφές συνολικό κόστος εκ των προτέρων.</p></article>
         </div>
       </div>
     </section>
@@ -206,7 +210,7 @@
         <p class="eyebrow" data-reveal>Πώς λειτουργεί</p>
         <h2 data-reveal style="--i:1">Τέσσερα απλά βήματα</h2>
         <ol class="how">
-          <li data-reveal style="--i:1"><strong>Επιλέξτε ημερομηνίες και βαν</strong><span>Βλέπετε μόνο τα βαν που είναι ελεύθερα για όλη τη διάρκεια της διαδρομής σας.</span></li>
+          <li data-reveal style="--i:1"><strong>Επιλέξτε ημερομηνίες και βαν</strong><span>Βλέπετε μόνο τα βαν που είναι ελεύθερα για όλη τη διάρκεια του έργου σας.</span></li>
           <li data-reveal style="--i:2"><strong>Στείλτε το αίτημά σας</strong><span>Συμπληρώστε τα στοιχεία σας και ορίστε στον χάρτη τα σημεία παραλαβής και επιστροφής.</span></li>
           <li data-reveal style="--i:3"><strong>Επιβεβαιώνουμε μαζί σας</strong><span>Επικοινωνούμε τηλεφωνικά ή με email για να κλείσουμε την κράτηση.</span></li>
           <li data-reveal style="--i:4"><strong>Παραλάβετε το βαν</strong><span>Φέρτε το δίπλωμά σας. Τον έλεγχο τον κάνουμε αυτοπροσώπως κατά την παραλαβή.</span></li>
@@ -214,68 +218,54 @@
       </div>
     </section>
 
-    <!-- ===== Why us + PHOTO 3 ===== -->
+    <!-- ===== Why us + small framed PHOTO 2 ===== -->
     <section class="section">
       <div class="wrap split">
         <div>
           <p class="eyebrow dark" data-reveal>Γιατί εμάς</p>
           <h2 data-reveal style="--i:1">Απλά, καθαρά, χωρίς εκπλήξεις</h2>
           <div class="perks">
-            <div data-reveal style="--i:1"><strong>Ζωντανή διαθεσιμότητα</strong><p>Χωρίς τηλέφωνα και αναμονή: βλέπετε αμέσως ποια βαν είναι ελεύθερα.</p></div>
+            <div data-reveal style="--i:1"><strong>Ζωντανή διαθεσιμότητα</strong><p>Βλέπετε αμέσως ποια βαν είναι ελεύθερα, χωρίς τηλέφωνα και αναμονή.</p></div>
             <div data-reveal style="--i:2"><strong>Σαφές συνολικό κόστος</strong><p>Τιμή ανά ημέρα × αριθμός ημερών, πριν στείλετε οτιδήποτε.</p></div>
-            <div data-reveal style="--i:3"><strong>Παραλαβή και επιστροφή όπου θέλετε</strong><p>Επιλέξτε στον χάρτη πού θα βρεθούμε και πού θα αφήσετε το βαν στην Αθήνα.</p></div>
-            <div data-reveal style="--i:4"><strong>Απαντά πάντα άνθρωπος</strong><p>Μιλήστε μαζί μας στο WhatsApp ή με email για ό,τι χρειάζεστε.</p></div>
+            <div data-reveal style="--i:3"><strong>Παραλαβή και επιστροφή όπου χρειάζεστε</strong><p>Ορίστε στον χάρτη το σημείο παραλαβής και επιστροφής: αποθήκη, γραφείο ή εργοτάξιο στην Αθήνα.</p></div>
+            <div data-reveal style="--i:4"><strong>Απαντά πάντα άνθρωπος</strong><p>Για ειδικές ανάγκες ή περισσότερα οχήματα, μιλήστε μαζί μας στο WhatsApp ή με email.</p></div>
           </div>
         </div>
-        <figure class="photo tall" data-reveal style="--i:2">
-          <img data-photo src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=70" alt="" loading="lazy" />
-          <figcaption class="glass-tag">Κράτηση σε λίγα λεπτά</figcaption>
+        <figure class="frame side-photo" data-reveal style="--i:2">
+          <img data-photo src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=900&q=70" alt="" loading="lazy" />
+          <figcaption class="glass-tag">Για εργοτάξια και τεχνικά έργα</figcaption>
         </figure>
       </div>
     </section>
 
-    <!-- ===== PHOTO 4: mosaic ===== -->
-    <section class="section section-sand">
-      <div class="wrap">
-        <p class="eyebrow dark" data-reveal>Έμπνευση</p>
-        <h2 data-reveal style="--i:1">Στιγμές που σας περιμένουν</h2>
-        <div class="mosaic">
-          <figure class="photo m1" data-reveal><img data-photo src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Ελευθερία στη διαδρομή</figcaption></figure>
-          <figure class="photo m2" data-reveal style="--i:1"><img data-photo src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Φύση χωρίς βιασύνη</figcaption></figure>
-          <figure class="photo m3" data-reveal style="--i:2"><img data-photo src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Στιγμές που μένουν</figcaption></figure>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== FAQ ===== -->
-    <section id="faq" class="section">
+    <section id="faq" class="section section-white">
       <div class="wrap">
         <p class="eyebrow dark" data-reveal>Συχνές ερωτήσεις</p>
         <h2 data-reveal style="--i:1">Έχετε απορίες;</h2>
         <div class="faq">
-          <details data-reveal><summary>Πληρώνω όταν στέλνω το αίτημα;</summary><p>Όχι. Το αίτημα δεν είναι πληρωμή. Πρώτα επικοινωνούμε μαζί σας για να επιβεβαιώσουμε τη διαθεσιμότητα και τις λεπτομέρειες.</p></details>
-          <details data-reveal style="--i:1"><summary>Πώς υπολογίζονται οι ημέρες ενοικίασης;</summary><p>Μετράνε και η ημέρα παραλαβής και η ημέρα επιστροφής. Για παράδειγμα, από 10 έως 12 Ιουνίου υπολογίζονται 3 ημέρες.</p></details>
-          <details data-reveal style="--i:2"><summary>Ποια περιοχή καλύπτετε;</summary><p>Οι διευθύνσεις παραλαβής και επιστροφής πρέπει να είναι στην περιοχή της Αθήνας. Χρειάζεστε κάτι διαφορετικό; Στείλτε μας μήνυμα και θα το δούμε μαζί.</p></details>
-          <details data-reveal style="--i:3"><summary>Τι χρειάζομαι κατά την παραλαβή;</summary><p>Ένα έγκυρο δίπλωμα οδήγησης. Το ελέγχουμε αυτοπροσώπως, οπότε δεν χρειάζεται να ανεβάσετε τίποτα online.</p></details>
-          <details data-reveal style="--i:4"><summary>Μπορώ να αλλάξω ή να ακυρώσω ένα αίτημα;</summary><p>Ναι. Επικοινωνήστε μαζί μας στο WhatsApp ή με email και πείτε μας το όνομά σας και τις ημερομηνίες.</p></details>
+          <details data-reveal><summary>Για ποια χρήση προορίζονται τα βαν;</summary><p>Για επαγγελματική χρήση: μεταφορά υλικών, εργαλείων και εξοπλισμού για εργοτάξια, συνεργεία και τεχνικές εταιρείες.</p></details>
+          <details data-reveal style="--i:1"><summary>Πληρώνω όταν στέλνω το αίτημα;</summary><p>Όχι. Το αίτημα δεν είναι πληρωμή. Πρώτα επικοινωνούμε μαζί σας για να επιβεβαιώσουμε τη διαθεσιμότητα και τις λεπτομέρειες.</p></details>
+          <details data-reveal style="--i:2"><summary>Πώς υπολογίζονται οι ημέρες ενοικίασης;</summary><p>Μετράνε και η ημέρα παραλαβής και η ημέρα επιστροφής. Για παράδειγμα, από 10 έως 12 Μαρτίου υπολογίζονται 3 ημέρες.</p></details>
+          <details data-reveal style="--i:3"><summary>Ποια περιοχή καλύπτετε;</summary><p>Οι διευθύνσεις παραλαβής και επιστροφής πρέπει να είναι στην περιοχή της Αθήνας. Χρειάζεστε κάτι διαφορετικό; Στείλτε μας μήνυμα και θα το εξετάσουμε.</p></details>
+          <details data-reveal style="--i:4"><summary>Τι χρειάζομαι κατά την παραλαβή;</summary><p>Ένα έγκυρο δίπλωμα οδήγησης. Το ελέγχουμε αυτοπροσώπως, οπότε δεν χρειάζεται να ανεβάσετε τίποτα online.</p></details>
+          <details data-reveal><summary>Χρειάζομαι περισσότερα από ένα βαν ή έχω ειδικές απαιτήσεις. Τι κάνω;</summary><p>Στείλτε μας μήνυμα στο WhatsApp ή email με τις ανάγκες σας και θα το εξετάσουμε μαζί.</p></details>
+          <details data-reveal style="--i:1"><summary>Μπορώ να αλλάξω ή να ακυρώσω ένα αίτημα;</summary><p>Ναι. Επικοινωνήστε μαζί μας στο WhatsApp ή με email και πείτε μας το όνομά σας και τις ημερομηνίες.</p></details>
         </div>
       </div>
     </section>
 
-    <!-- ===== Contact (photo) ===== -->
+    <!-- ===== Contact ===== -->
     <section id="contact" class="section tight">
       <div class="wrap">
         <div class="contact" data-reveal>
-          <img class="contact-img" data-photo src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1800&q=70" alt="" loading="lazy" />
-          <div class="contact-inner glass-dark">
-            <div>
-              <h2>Μιλήστε μαζί μας απευθείας</h2>
-              <p>Ερώτηση πριν την κράτηση, ειδική διαδρομή ή αίτημα της τελευταίας στιγμής; Γράψτε μας.</p>
-            </div>
-            <div class="contact-actions">
-              <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
-              <a class="btn btn-glow js-mail" href="#contact">Στείλτε email</a>
-            </div>
+          <div>
+            <h2>Μιλήστε μαζί μας απευθείας</h2>
+            <p>Χρειάζεστε βαν για ένα έργο, ειδικές απαιτήσεις ή περισσότερα από ένα οχήματα; Γράψτε μας.</p>
+          </div>
+          <div class="contact-actions">
+            <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
+            <a class="btn btn-accent js-mail" href="#contact">Στείλτε email</a>
           </div>
         </div>
       </div>
