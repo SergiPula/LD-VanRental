@@ -177,6 +177,14 @@
     if (cfg.CONTACT_EMAIL) a.href = `mailto:${cfg.CONTACT_EMAIL}?subject=${encodeURIComponent("Ερώτηση για ενοικίαση βαν")}`;
     else a.hidden = true;
   });
+  document.querySelectorAll(".js-email-label").forEach((el) => {
+    if (cfg.PUBLIC_EMAIL) el.textContent = cfg.PUBLIC_EMAIL;
+  });
+  const tel = String(cfg.PHONE_NUMBER || "").replace(/[^\d+]/g, "");
+  document.querySelectorAll(".js-tel").forEach((a) => {
+    if (tel) a.href = `tel:${tel}`;
+    else a.hidden = true;
+  });
 
   /* ------------------------------------------------------------------ */
   /* Init                                                                */
