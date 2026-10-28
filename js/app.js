@@ -28,7 +28,7 @@
   };
   const FALLBACK_IMG =
     "data:image/svg+xml;utf8," +
-    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#dfe8ea"/><text x="50%" y="50%" text-anchor="middle" fill="#5b6a72" font-family="sans-serif" font-size="32">Χωρίς φωτογραφία</text></svg>');
+    encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500"><rect width="100%" height="100%" fill="#ece4d6"/><text x="50%" y="50%" text-anchor="middle" fill="#6a6f68" font-family="sans-serif" font-size="32">Χωρίς φωτογραφία</text></svg>');
 
   // Known English category values (from the sample data) get Greek labels; the raw value is still used for filtering.
   const CATEGORY_LABELS = { Camper: "Κάμπερ", Cargo: "Μεταφορικό", Passenger: "Επιβατικό", Van: "Βαν" };
@@ -62,6 +62,7 @@
       li.classList.toggle("active", s === n);
       li.classList.toggle("done", s < n);
     });
+    $("progressFill").style.width = `${(n / 3) * 100}%`;
     $("book").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     if (n === 2) initMap(); // Leaflet needs a visible container
   }
@@ -101,6 +102,33 @@
     root.querySelectorAll("[data-reveal]").forEach((el) => (io ? io.observe(el) : el.removeAttribute("data-reveal")));
   }
   observeReveals();
+
+  /* ------------------------------------------------------------------ */
+  /* Photos: if one fails to load, hide it so the gradient behind shows  */
+  /* ------------------------------------------------------------------ */
+  document.querySelectorAll("img[data-photo]").forEach((img) => {
+    img.addEventListener("error", () => img.classList.add("failed"));
+    if (img.loading !== "lazy" && img.complete && img.naturalWidth === 0) img.classList.add("failed");
+  });
+
+  // Gentle parallax on the photo band (skipped when the user prefers reduced motion)
+  const parallaxEls = [...document.querySelectorAll("[data-parallax]")];
+  if (parallaxEls.length && !reduceMotion) {
+    let ticking = false;
+    const update = () => {
+      const vh = window.innerHeight;
+      parallaxEls.forEach((img) => {
+        const r = img.parentElement.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const p = (r.top + r.height / 2 - vh / 2) / vh; // roughly -1..1
+        img.style.transform = `translate3d(0, ${(p * -36).toFixed(1)}px, 0) scale(1.15)`;
+      });
+      ticking = false;
+    };
+    window.addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+  }
 
   /* ------------------------------------------------------------------ */
   /* Contact links (WhatsApp / Email) – values come from config.js       */
