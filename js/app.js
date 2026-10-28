@@ -1,6 +1,6 @@
 /* Ενοικίαση Βαν – frontend logic (vanilla JS, no build step).
  * Flow: Step 1 search -> Step 2 details + map -> Step 3 confirmation.
- * Supabase calls (get_available_vans, create_booking, vans select) are unchanged.
+ * create_booking sends pickup and return times; the server prices 24-hour days.
  * Needs: supabase-js, Leaflet (loaded in index.html) and js/config.js. */
 (() => {
   "use strict";
@@ -19,8 +19,31 @@
   const fmtDate = (iso) =>
     new Date(iso + "T00:00:00").toLocaleDateString("el-GR", { day: "numeric", month: "long", year: "numeric" });
   const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
-  // Inclusive day count, identical to the DB logic (start and end day both count).
-  const countDays = (a, b) => Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
+  // One billable day is 24 hours from pickup, plus 60 minutes of grace.
+  // 08:00 today → 08:00 tomorrow = 1 day. 08:00 → 09:01 tomorrow = 2 days.
+  // Must match public.create_booking in 006_rental_hours.sql.
+  const billableDays = (startDate, startTime, endDate, endTime) => {
+    const start = new Date(`${startDate}T${startTime}`);
+    const end = new Date(`${endDate}T${endTime}`);
+    const minutes = Math.round((end - start) / 60000);
+    if (!(minutes > 0)) return 0;
+    return Math.max(1, Math.ceil((minutes - 60) / 1440));
+  };
+  // Must match public.rental_quote: 1 day full, 2–3 −10%, 4–6 −15%, 7–13 −20%, 14+ −25%.
+  const quoteFactor = (days) => (days <= 1 ? 1 : days <= 3 ? 0.9 : days <= 6 ? 0.85 : days <= 13 ? 0.8 : 0.75);
+  const tierLabel = (days) => {
+    if (days <= 1) return "1 ημέρα · πλήρης τιμή";
+    if (days <= 3) return "2–3 ημέρες · −10%";
+    if (days <= 6) return "4–6 ημέρες · −15%";
+    if (days <= 13) return "7–13 ημέρες · −20%";
+    return "14+ ημέρες · −25%";
+  };
+  const quoteFor = (daily, days) => {
+    const factor = quoteFactor(days);
+    const total = Math.round(Number(daily) * days * factor * 100) / 100;
+    const rate = Math.round(Number(daily) * factor * 100) / 100;
+    return { factor, rate, total, label: tierLabel(days) };
+  };
   const todayISO = () => {
     const d = new Date();
     d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
@@ -39,7 +62,7 @@
   function friendlyError(err) {
     const m = (err && err.message) || "";
     if (m.includes("van_not_available")) return "Λυπούμαστε, το βαν μόλις κρατήθηκε για αυτές τις ημερομηνίες. Επιλέξτε άλλο βαν ή άλλες ημερομηνίες.";
-    if (m.includes("invalid_dates")) return "Επιλέξτε έγκυρες ημερομηνίες (από σήμερα και μετά, με επιστροφή μετά την παραλαβή).";
+    if (m.includes("invalid_dates")) return "Επιλέξτε έγκυρες ημερομηνίες και ώρες (από σήμερα και μετά, με επιστροφή μετά την παραλαβή).";
     if (m.includes("invalid_customer")) return "Ελέγξτε το όνομα, το email και το τηλέφωνό σας και δοκιμάστε ξανά.";
     if (m.includes("invalid_address")) return "Συμπληρώστε διεύθυνση παραλαβής και επιστροφής.";
     return "Κάτι πήγε στραβά. Δοκιμάστε ξανά σε λίγο.";
@@ -200,7 +223,7 @@
   /* ------------------------------------------------------------------ */
   /* Van cards (used by search results and by the fleet section)         */
   /* ------------------------------------------------------------------ */
-  function buildCard(van, { actionLabel, onAction, index = 0, reveal = false }) {
+  function buildCard(van, { actionLabel, onAction, index = 0, reveal = false, quote = null }) {
     const card = document.createElement("article");
     card.className = "card";
     if (reveal) { card.setAttribute("data-reveal", ""); card.style.setProperty("--i", index % 4); }
@@ -220,14 +243,18 @@
     const specs = document.createElement("p"); specs.className = "specs"; specs.textContent = van.description || "";
     const foot = document.createElement("div"); foot.className = "card-foot";
     const price = document.createElement("div"); price.className = "price";
-    price.append(money(van.price_per_day) + " ");
+    const shown = quote ? quote.rate : van.price_per_day;
+    price.append(money(shown) + " ");
     const small = document.createElement("small"); small.textContent = "/ ημέρα"; price.appendChild(small);
+    const note = document.createElement("p"); note.className = "price-note";
+    note.textContent = quote
+      ? `${quote.label} · σύνολο ${money(quote.total)}`
+      : `από ${money(Number(van.price_per_day) * 0.75)} / ημέρα για 14+ ημέρες`;
     const btn = document.createElement("button");
     btn.className = "btn btn-primary"; btn.type = "button"; btn.textContent = actionLabel;
     btn.addEventListener("click", () => onAction(van));
     foot.append(price, btn);
-
-    body.append(h3, specs, foot);
+    body.append(h3, specs, foot, note);
     card.append(media, body);
     return card;
   }
@@ -278,10 +305,15 @@
   $("searchForm").addEventListener("submit", async (e) => {
     e.preventDefault();
     const start = $("startDate").value, end = $("endDate").value;
+    const startTime = $("startTime").value, endTime = $("endTime").value;
     showError($("searchError"), "");
-    if (!start || !end) return showError($("searchError"), "Επιλέξτε ημερομηνία παραλαβής και επιστροφής.");
-    if (end < start) return showError($("searchError"), "Η ημερομηνία επιστροφής πρέπει να είναι ίδια ή μετά την παραλαβή.");
-    if (start < todayISO()) return showError($("searchError"), "Η ημερομηνία παραλαβής δεν μπορεί να είναι στο παρελθόν.");
+    if (!start || !end || !startTime || !endTime) return showError($("searchError"), "Επιλέξτε ημερομηνία και ώρα παραλαβής και επιστροφής.");
+    const pickupAt = new Date(`${start}T${startTime}`);
+    const returnAt = new Date(`${end}T${endTime}`);
+    if (!(returnAt > pickupAt)) return showError($("searchError"), "Η επιστροφή πρέπει να είναι μετά την παραλαβή.");
+    if (pickupAt < new Date()) return showError($("searchError"), "Η ώρα παραλαβής δεν μπορεί να είναι στο παρελθόν.");
+    const days = billableDays(start, startTime, end, endTime);
+    if (!days) return showError($("searchError"), "Η επιστροφή πρέπει να είναι μετά την παραλαβή.");
 
     $("resultsInfo").textContent = "Έλεγχος διαθεσιμότητας…";
     skeletons($("results"));
@@ -295,7 +327,7 @@
       return showError($("searchError"), friendlyError(error));
     }
 
-    state.start = start; state.end = end; state.days = countDays(start, end);
+    state.start = start; state.end = end; state.startTime = startTime; state.endTime = endTime; state.days = days;
     renderVans(data || []);
   });
 
@@ -307,9 +339,12 @@
       return;
     }
     $("resultsInfo").textContent =
-      `${plural(vans.length, "διαθέσιμο βαν", "διαθέσιμα βαν")} · ${plural(state.days, "ημέρα", "ημέρες")}`;
+      `${plural(vans.length, "διαθέσιμο βαν", "διαθέσιμα βαν")} · ${plural(state.days, "ημέρα", "ημέρες")} · ${tierLabel(state.days)}`;
     vans.forEach((van, i) =>
-      box.appendChild(buildCard(van, { actionLabel: "Κράτηση", onAction: selectVan, index: i, reveal: true })));
+      box.appendChild(buildCard(van, {
+        actionLabel: "Κράτηση", onAction: selectVan, index: i, reveal: true,
+        quote: quoteFor(van.price_per_day, state.days),
+      })));
     observeReveals(box);
   }
 
@@ -317,11 +352,13 @@
     state.van = van;
     $("sumImg").src = van.image_url || FALLBACK_IMG;
     $("sumName").textContent = van.name;
-    $("sumStart").textContent = fmtDate(state.start);
-    $("sumEnd").textContent = fmtDate(state.end);
+    $("sumStart").textContent = `${fmtDate(state.start)}, ${state.startTime}`;
+    $("sumEnd").textContent = `${fmtDate(state.end)}, ${state.endTime}`;
+    const quote = quoteFor(van.price_per_day, state.days);
     $("sumDays").textContent = state.days;
-    $("sumRate").textContent = money(van.price_per_day);
-    $("sumTotal").textContent = money(van.price_per_day * state.days); // price_per_day * number_of_days
+    $("sumTier").textContent = quote.label;
+    $("sumRate").textContent = money(quote.rate);
+    $("sumTotal").textContent = money(quote.total);
     showError($("bookingError"), "");
     goToStep(2);
   }
@@ -579,6 +616,8 @@
       p_van_id: state.van.id,
       p_start: state.start,
       p_end: state.end,
+      p_pickup_time: state.startTime,
+      p_return_time: state.endTime,
       p_full_name: $("fullName").value.trim(),
       p_email: $("email").value.trim(),
       p_phone: normalizePhone($("phone").value),
