@@ -278,7 +278,8 @@ img.failed { display: none; }
   display: grid; gap: .85rem; grid-template-columns: 1fr; padding: .85rem;
   border-radius: 20px; background: rgba(255, 255, 255, 0.66); border: 1px solid var(--line);
 }
-@media (min-width: 860px) { .search-bar { grid-template-columns: 1fr 1fr 1fr auto; align-items: end; } }
+@media (min-width: 860px) { .search-bar { grid-template-columns: 1.3fr 1.3fr 1fr auto; align-items: end; } }
+.when-row { display: grid; grid-template-columns: 1.35fr .85fr; gap: .45rem; }
 .search-bar label, .field > label { margin: 0; }
 label { display: block; font-weight: 600; font-size: .86rem; color: var(--ink-soft); }
 input, select {
@@ -572,4 +573,37 @@ input:disabled { background: var(--canvas-2); color: var(--muted); cursor: not-a
   .js [data-reveal] { opacity: 1; transform: none; }
   .tick circle, .tick path { stroke-dashoffset: 0 !important; }
   .to-top.is-visible { opacity: 1; transform: none; }
+}
+
+/* ---------- Pricing tiers and contract ---------- */
+.rate-table {
+  margin: 0 0 1rem; padding: .9rem 1rem  .35rem; border-radius: 16px;
+  background: rgba(255, 255, 255, 0.55); border: 1px solid var(--line);
+}
+.rate-title { margin: 0; font-weight: 700; font-size: .92rem; }
+.rate-table ul { list-style: none; margin: .45rem 0 .2rem; padding: 0; display: grid; gap: .28rem; }
+.rate-table li { display: flex; justify-content: space-between; gap: 1rem; font-size: .9rem; }
+.rate-table .hint { margin-top: .35rem; }
+.age-note { margin: 0 0 1rem; }
+.age-note a, .faq a { color: var(--teal); font-weight: 600; }
+.how a { color: var(--amber-2); font-weight: 600; }
+.price-note { margin: .45rem 0 0; color: var(--muted); font-size: .8rem; line-height: 1.4; }
+
+.contract-main { padding: calc(var(--header) + 1.5rem) 0 4rem; }
+.contract {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 24px;
+  padding: 1.4rem 1.2rem 2rem; box-shadow: var(--shadow);
+}
+.contract h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); }
+.contract h2 { font-size: 1.25rem; margin-top: 1.6rem; }
+.contract p, .contract li { color: var(--ink-soft); }
+.contract ol { padding-left: 1.2rem; }
+.contract .blank { margin: .35rem 0; color: var(--ink); }
+.contract .sign { display: grid; gap: 1.2rem; margin-top: 1.4rem; }
+@media (min-width: 700px) { .contract .sign { grid-template-columns: 1fr 1fr; } .contract { padding: 2rem 2.2rem 2.4rem; } }
+.contract .fine { font-size: .82rem; }
+@media print {
+  .site-header, .no-print, .scroll-progress { display: none !important; }
+  .contract-main { padding: 0; }
+  .contract { box-shadow: none; border: 0; }
 }
