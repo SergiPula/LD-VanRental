@@ -21,8 +21,8 @@
   <header class="site-header" id="siteHeader">
     <div class="wrap bar">
       <a class="brand" href="#top">
-        <span class="logo" aria-hidden="true">
-          <svg viewBox="0 0 32 32" width="18" height="18"><path fill="currentColor" d="M4 20.5V12.2c0-.7.4-1.3 1-1.6l8.2-4.1a2.2 2.2 0 0 1 2 0l8.2 4.1c.6.3 1 .9 1 1.6v8.3c0 .7-.4 1.3-1 1.6L15.2 26a2.2 2.2 0 0 1-2 0L5 22.1a1.8 1.8 0 0 1-1-1.6Zm2.2-.4 7.6 3.5c.4.2.9.2 1.3 0l7.5-3.5V12.6L15.2 9.2a.4.4 0 0 0-.4 0l-8.6 3.4v7.5Z"/><path fill="currentColor" d="M14.2 14.2h3.6v7.1h-3.6z"/></svg>
+        <span class="logo">
+          <img src="logo-header.jpg" alt="LD Van Rental" width="52" height="52" />
         </span>
         <span class="brand-text">
           <span class="brand-kicker">Αθήνα</span>
@@ -53,6 +53,7 @@
           <div class="hero-cta" data-reveal style="--i:3">
             <a class="btn btn-accent" href="#book">Έλεγχος διαθεσιμότητας</a>
             <a class="btn btn-outline js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
+            <a class="btn btn-call js-tel" href="tel:+306986900521">Κλήση</a>
           </div>
           <ul class="chips" data-reveal style="--i:4">
             <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
@@ -198,8 +199,8 @@
     <section id="fleet" class="section">
       <div class="wrap">
         <p class="eyebrow" data-reveal>Ο στόλος μας</p>
-        <h2 data-reveal style="--i:1">Βαν για επαγγελματική χρήση</h2>
-        <p class="section-lead" data-reveal style="--i:2">Όλα τα βαν της λίστας μπορούν να κρατηθούν online. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα για τη δουλειά σας.</p>
+        <h2 data-reveal style="--i:1">Τέσσερα Ford Transit</h2>
+        <p class="section-lead" data-reveal style="--i:2">Ο στόλος είναι τέσσερα ίδια Ford Transit για εργοτάξια, εργαλεία και μεταφορά υλικών. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα.</p>
         <div id="fleetGrid" class="grid"></div>
       </div>
     </section>
@@ -311,7 +312,8 @@
           </div>
           <div class="contact-actions">
             <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
-            <a class="btn btn-accent js-mail" href="#contact">Στείλτε email</a>
+            <a class="btn btn-call js-tel" href="tel:+306986900521">Κλήση</a>
+            <a class="btn btn-accent js-mail" href="mailto:ld.vanrental@gmail.com"><span class="js-email-label">info@ld.vanrental.com</span></a>
           </div>
         </div>
       </div>
@@ -330,7 +332,11 @@
         <a href="#faq">Ερωτήσεις</a>
         <a href="#contact">Επικοινωνία</a>
       </nav>
-      <p class="footer-meta">© <span id="year"></span> · Αθήνα, Ελλάδα<br />Φωτογραφίες από το Unsplash</p>
+      <p class="footer-meta">
+        <a class="js-tel" href="tel:+306986900521">+30 698 690 0521</a><br />
+        <a class="js-mail" href="mailto:ld.vanrental@gmail.com"><span class="js-email-label">info@ld.vanrental.com</span></a><br />
+        © <span id="year"></span> · Αθήνα, Ελλάδα
+      </p>
     </div>
   </footer>
 
@@ -343,7 +349,11 @@
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M4 3h16a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H9l-5 4v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg>
       <span>WhatsApp</span>
     </a>
-    <a class="fab fab-mail js-mail" href="#contact" aria-label="Αποστολή email">
+    <a class="fab fab-call js-tel" href="tel:+306986900521" aria-label="Κλήση στο +30 698 690 0521">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M7.2 3.8c.4-.4 1-.5 1.5-.3l2.2.9c.5.2.8.7.8 1.2l-.2 2.4c0 .4-.2.8-.6 1L9.4 10c.8 1.6 2 2.8 3.6 3.6l1-1.5c.2-.4.6-.6 1-.6l2.4-.2c.5 0 1 .3 1.2.8l.9 2.2c.2.5.1 1.1-.3 1.5l-1.4 1.4c-.4.4-1 .6-1.6.5C10.8 17.2 6.8 13.2 5.3 8.4c-.1-.6.1-1.2.5-1.6l1.4-1.4z"/></svg>
+      <span>Κλήση</span>
+    </a>
+    <a class="fab fab-mail js-mail" href="mailto:ld.vanrental@gmail.com" aria-label="Αποστολή email στο info@ld.vanrental.com">
       <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm1.4 2 7.2 4.6a.7.7 0 0 0 .8 0L19.6 7 4.4 7z"/></svg>
       <span>Email</span>
     </a>
