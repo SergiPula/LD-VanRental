@@ -9,6 +9,15 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.4";
 const esc = (s: unknown) =>
   String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+const clock = (t: unknown) => {
+  const m = String(t ?? "").match(/^(\d{2}:\d{2})/);
+  return m ? m[1] : "";
+};
+const when = (date: unknown, time: unknown) => {
+  const c = clock(time);
+  return c ? `${esc(date)} ${esc(c)}` : esc(date);
+};
+
 Deno.serve(async (req) => {
   // Only our own DB trigger knows this secret.
   if (req.headers.get("x-webhook-secret") !== Deno.env.get("WEBHOOK_SECRET")) {
@@ -35,7 +44,7 @@ Deno.serve(async (req) => {
   const text = [
     "🚨 <b>New Van Booking Request!</b>",
     `🚐 <b>Van:</b> ${esc(van?.name)}`,
-    `📅 <b>Dates:</b> ${esc(booking.start_date)} to ${esc(booking.end_date)}`,
+    `📅 <b>Dates:</b> ${when(booking.start_date, booking.pickup_time)} – ${when(booking.end_date, booking.return_time)}`,
     `💰 <b>Total Price:</b> €${esc(Number(booking.total_price).toFixed(2))}`,
     `👤 <b>Customer:</b> ${esc(customer?.full_name)}`,
     `📞 <b>Phone:</b> ${esc(customer?.phone)}`,
