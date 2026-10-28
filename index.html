@@ -4,13 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Ενοικίαση Βαν στην Αθήνα – Κράτηση online</title>
-  <meta name="description" content="Ενοικίαση κάμπερ, μεταφορικών και βαν για πολλά άτομα στην Αθήνα. Δείτε τη διαθεσιμότητα σε πραγματικό χρόνο, επιλέξτε σημεία παραλαβής και επιστροφής στον χάρτη και στείλτε αίτημα σε λίγα λεπτά." />
-  <meta name="theme-color" content="#071318" />
+  <meta name="description" content="Ενοικίαση βαν στην Αθήνα με ζωντανή διαθεσιμότητα. Διαλέξτε ημερομηνίες, ορίστε σημεία παραλαβής και επιστροφής στον χάρτη και στείλτε αίτημα σε λίγα λεπτά." />
+  <meta name="theme-color" content="#0f1412" />
   <script>document.documentElement.classList.add('js')</script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Manrope + Inter: both include the Greek alphabet -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
+  <!-- Noto Serif Display (headings) + Inter (body): both include the Greek alphabet -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
@@ -18,10 +19,7 @@
   <!-- ===== Header ===== -->
   <header class="site-header" id="siteHeader">
     <div class="wrap bar">
-      <a class="brand" href="#top">
-        <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M2 7h12v9H2zM14 10h4.5l3.500 3.500V16H14z"/><circle cx="7" cy="17.500" r="2.300" fill="currentColor" stroke="#071318" stroke-width="1.200"/><circle cx="17.500" cy="17.500" r="2.300" fill="currentColor" stroke="#071318" stroke-width="1.200"/></svg></span>
-        <span>Ενοικίαση Βαν Αθήνα</span>
-      </a>
+      <a class="brand" href="#top"><span class="logo" aria-hidden="true"></span><span>Ενοικίαση Βαν Αθήνα</span></a>
       <nav class="nav" id="mainNav" aria-label="Κύρια πλοήγηση">
         <a href="#fleet">Ο στόλος μας</a>
         <a href="#how">Πώς λειτουργεί</a>
@@ -29,47 +27,32 @@
         <a href="#contact">Επικοινωνία</a>
       </nav>
       <div class="bar-actions">
-        <a class="btn btn-gold btn-sm" href="#book">Κράτηση</a>
+        <a class="btn btn-glow btn-sm" href="#book">Κράτηση</a>
         <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Άνοιγμα μενού"><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
 
   <main id="top">
-    <!-- ===== Hero ===== -->
+    <!-- ===== Hero (photo) ===== -->
     <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <p class="eyebrow" data-reveal>Ενοικίαση βαν στην Αθήνα</p>
-          <h1 data-reveal style="--i:1">Το κατάλληλο βαν<br />για κάθε <em>διαδρομή</em>.</h1>
-          <p class="lead" data-reveal style="--i:2">Κάμπερ, μεταφορικά και βαν για πολλά άτομα. Δείτε σε πραγματικό χρόνο ποια είναι ελεύθερα, ορίστε στον χάρτη πού θα το παραλάβετε και στείλτε το αίτημά σας σε λίγα λεπτά.</p>
-          <div class="hero-cta" data-reveal style="--i:3">
-            <a class="btn btn-gold" href="#book">Έλεγχος διαθεσιμότητας</a>
-            <a class="btn btn-ghost js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
-          </div>
-          <ul class="chips" data-reveal style="--i:4">
-            <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
-            <li>Σημεία στον χάρτη της Αθήνας</li>
-            <li>Χωρίς πληρωμή online</li>
-          </ul>
+      <!-- PHOTO 1: hero background. Replace the URL to change it. -->
+      <div class="hero-media" aria-hidden="true">
+        <img data-photo src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=2000&q=70" alt="" fetchpriority="high" />
+      </div>
+      <div class="wrap hero-copy">
+        <p class="eyebrow" data-reveal>Ενοικίαση βαν στην Αθήνα</p>
+        <h1 data-reveal style="--i:1">Ταξιδέψτε με<br />τον <em>δικό σας ρυθμό</em>.</h1>
+        <p class="lead" data-reveal style="--i:2">Ζωντανή διαθεσιμότητα, καθαρή τιμή και παραλαβή εκεί που σας βολεύει. Διαλέξτε ημερομηνίες, ορίστε στον χάρτη πού θα βρεθούμε και στείλτε το αίτημά σας σε λίγα λεπτά.</p>
+        <div class="hero-cta" data-reveal style="--i:3">
+          <a class="btn btn-glow" href="#book">Έλεγχος διαθεσιμότητας</a>
+          <a class="btn btn-glass js-wa" href="#contact" target="_blank" rel="noopener">Συνομιλία στο WhatsApp</a>
         </div>
-
-        <div class="hero-art" aria-hidden="true">
-          <svg viewBox="0 0 520 300" class="van-svg">
-            <defs><linearGradient id="bodyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#c9dde1"/></linearGradient></defs>
-            <ellipse cx="260" cy="268" rx="215" ry="10" fill="rgba(0,0,0,.4)"/>
-            <g class="van-body">
-              <path d="M60 232V92a20 20 0 0 1 20-20h250c22 0 38 8 50 24l56 62c8 9 12 18 12 30v44a10 10 0 0 1-10 10H70a10 10 0 0 1-10-10z" fill="url(#bodyG)"/>
-              <path d="M338 90h8c10 0 18 4 24 11l46 52H338z" fill="#0f4c5c"/>
-              <rect x="60" y="178" width="386" height="12" fill="#f2b53c"/>
-              <rect x="436" y="198" width="12" height="14" rx="3" fill="#ffd06b"/>
-              <circle cx="150" cy="242" r="40" fill="#071318"/><circle cx="380" cy="242" r="40" fill="#071318"/>
-              <g class="wheel"><circle cx="150" cy="242" r="30" fill="#0c1a21"/><circle cx="150" cy="242" r="13" fill="#c9dde1"/><path d="M150 214v56M122 242h56" stroke="#5b6a72" stroke-width="3"/></g>
-              <g class="wheel"><circle cx="380" cy="242" r="30" fill="#0c1a21"/><circle cx="380" cy="242" r="13" fill="#c9dde1"/><path d="M380 214v56M352 242h56" stroke="#5b6a72" stroke-width="3"/></g>
-            </g>
-            <path class="road" d="M0 282H520" stroke="rgba(255,255,255,.4)" stroke-width="3" stroke-dasharray="26 22"/>
-          </svg>
-        </div>
+        <ul class="chips" data-reveal style="--i:4">
+          <li>Διαθεσιμότητα σε πραγματικό χρόνο</li>
+          <li>Σημεία στον χάρτη της Αθήνας</li>
+          <li>Χωρίς πληρωμή online</li>
+        </ul>
       </div>
     </section>
 
@@ -81,6 +64,7 @@
           <li data-step="2"><span class="n">2</span><span class="t">Τα στοιχεία σας</span></li>
           <li data-step="3"><span class="n">3</span><span class="t">Ολοκλήρωση</span></li>
         </ol>
+        <div class="progress" aria-hidden="true"><i id="progressFill" style="width:33.33%"></i></div>
 
         <!-- STEP 1 -->
         <div id="step1" class="panel">
@@ -161,7 +145,7 @@
               <!-- Honeypot: hidden from humans, bots fill it in -->
               <input id="website" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
               <p id="bookingError" class="error" role="alert" hidden></p>
-              <button type="submit" id="submitBtn" class="btn btn-gold btn-block">Αποστολή αιτήματος κράτησης</button>
+              <button type="submit" id="submitBtn" class="btn btn-glow btn-block">Αποστολή αιτήματος κράτησης</button>
             </form>
 
             <aside class="summary" aria-label="Σύνοψη κράτησης">
@@ -182,7 +166,7 @@
 
         <!-- STEP 3 -->
         <div id="step3" class="panel confirm" hidden>
-          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#f2b53c" stroke-width="3"/><path d="M15 27l8 8 14-16" fill="none" stroke="#0c1a21" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="tick" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24" fill="none" stroke="#c4623f" stroke-width="3"/><path d="M15 27l8 8 14-16" fill="none" stroke="#1d3a2c" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <h2>Ευχαριστούμε!</h2>
           <p>Το αίτημα κράτησής σας υποβλήθηκε. Θα επικοινωνήσουμε μαζί σας σύντομα.</p>
           <p class="muted" id="confirmRef"></p>
@@ -195,9 +179,24 @@
     <section id="fleet" class="section">
       <div class="wrap">
         <p class="eyebrow dark" data-reveal>Ο στόλος μας</p>
-        <h2 data-reveal style="--i:1">Βαν για κάθε ανάγκη</h2>
+        <h2 data-reveal style="--i:1">Βαν για κάθε ταξίδι</h2>
         <p class="section-lead" data-reveal style="--i:2">Όλα τα βαν της λίστας μπορούν να κρατηθούν online. Επιλέξτε ημερομηνίες για να δείτε ποια είναι ελεύθερα.</p>
         <div id="fleetGrid" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- ===== PHOTO 2: atmospheric band ===== -->
+    <section class="section tight" aria-labelledby="bandTitle">
+      <div class="wrap">
+        <div class="band" data-reveal>
+          <img class="band-img" data-photo data-parallax src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1800&q=70" alt="" loading="lazy" />
+          <div class="band-inner glass-dark">
+            <p class="eyebrow">Έτοιμοι για αναχώρηση</p>
+            <h2 id="bandTitle">Η διαδρομή είναι μέρος του ταξιδιού.</h2>
+            <p>Σχεδιάστε την απόδραση, τη μετακόμιση ή το οικογενειακό σας ταξίδι. Εμείς φροντίζουμε να έχετε το κατάλληλο όχημα, στο σημείο που σας βολεύει.</p>
+            <a class="btn btn-glow" href="#book">Δείτε τη διαθεσιμότητα</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -215,22 +214,41 @@
       </div>
     </section>
 
-    <!-- ===== Why us ===== -->
+    <!-- ===== Why us + PHOTO 3 ===== -->
     <section class="section">
+      <div class="wrap split">
+        <div>
+          <p class="eyebrow dark" data-reveal>Γιατί εμάς</p>
+          <h2 data-reveal style="--i:1">Απλά, καθαρά, χωρίς εκπλήξεις</h2>
+          <div class="perks">
+            <div data-reveal style="--i:1"><strong>Ζωντανή διαθεσιμότητα</strong><p>Χωρίς τηλέφωνα και αναμονή: βλέπετε αμέσως ποια βαν είναι ελεύθερα.</p></div>
+            <div data-reveal style="--i:2"><strong>Σαφές συνολικό κόστος</strong><p>Τιμή ανά ημέρα × αριθμός ημερών, πριν στείλετε οτιδήποτε.</p></div>
+            <div data-reveal style="--i:3"><strong>Παραλαβή και επιστροφή όπου θέλετε</strong><p>Επιλέξτε στον χάρτη πού θα βρεθούμε και πού θα αφήσετε το βαν στην Αθήνα.</p></div>
+            <div data-reveal style="--i:4"><strong>Απαντά πάντα άνθρωπος</strong><p>Μιλήστε μαζί μας στο WhatsApp ή με email για ό,τι χρειάζεστε.</p></div>
+          </div>
+        </div>
+        <figure class="photo tall" data-reveal style="--i:2">
+          <img data-photo src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1000&q=70" alt="" loading="lazy" />
+          <figcaption class="glass-tag">Κράτηση σε λίγα λεπτά</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== PHOTO 4: mosaic ===== -->
+    <section class="section section-sand">
       <div class="wrap">
-        <p class="eyebrow dark" data-reveal>Γιατί εμάς</p>
-        <h2 data-reveal style="--i:1">Απλά, καθαρά, χωρίς εκπλήξεις</h2>
-        <div class="perks">
-          <div data-reveal style="--i:1"><strong>Ζωντανή διαθεσιμότητα</strong><p>Χωρίς τηλέφωνα και αναμονή: βλέπετε αμέσως ποια βαν είναι ελεύθερα.</p></div>
-          <div data-reveal style="--i:2"><strong>Σαφές συνολικό κόστος</strong><p>Τιμή ανά ημέρα × αριθμός ημερών, πριν στείλετε οτιδήποτε.</p></div>
-          <div data-reveal style="--i:3"><strong>Παραλαβή και επιστροφή όπου θέλετε</strong><p>Επιλέξτε στον χάρτη πού θα βρεθούμε και πού θα αφήσετε το βαν στην Αθήνα.</p></div>
-          <div data-reveal style="--i:4"><strong>Απαντά πάντα άνθρωπος</strong><p>Μιλήστε μαζί μας στο WhatsApp ή με email για ό,τι χρειάζεστε.</p></div>
+        <p class="eyebrow dark" data-reveal>Έμπνευση</p>
+        <h2 data-reveal style="--i:1">Στιγμές που σας περιμένουν</h2>
+        <div class="mosaic">
+          <figure class="photo m1" data-reveal><img data-photo src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1000&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Ελευθερία στη διαδρομή</figcaption></figure>
+          <figure class="photo m2" data-reveal style="--i:1"><img data-photo src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Φύση χωρίς βιασύνη</figcaption></figure>
+          <figure class="photo m3" data-reveal style="--i:2"><img data-photo src="https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=70" alt="" loading="lazy" /><figcaption class="glass-tag">Στιγμές που μένουν</figcaption></figure>
         </div>
       </div>
     </section>
 
     <!-- ===== FAQ ===== -->
-    <section id="faq" class="section section-alt">
+    <section id="faq" class="section">
       <div class="wrap">
         <p class="eyebrow dark" data-reveal>Συχνές ερωτήσεις</p>
         <h2 data-reveal style="--i:1">Έχετε απορίες;</h2>
@@ -244,24 +262,32 @@
       </div>
     </section>
 
-    <!-- ===== Contact ===== -->
-    <section id="contact" class="section">
+    <!-- ===== Contact (photo) ===== -->
+    <section id="contact" class="section tight">
       <div class="wrap">
         <div class="contact" data-reveal>
-          <div>
-            <h2>Μιλήστε μαζί μας απευθείας</h2>
-            <p>Ερώτηση πριν την κράτηση, ειδική διαδρομή ή αίτημα της τελευταίας στιγμής; Γράψτε μας.</p>
-          </div>
-          <div class="contact-actions">
-            <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
-            <a class="btn btn-gold js-mail" href="#contact">Στείλτε email</a>
+          <img class="contact-img" data-photo src="https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?auto=format&fit=crop&w=1800&q=70" alt="" loading="lazy" />
+          <div class="contact-inner glass-dark">
+            <div>
+              <h2>Μιλήστε μαζί μας απευθείας</h2>
+              <p>Ερώτηση πριν την κράτηση, ειδική διαδρομή ή αίτημα της τελευταίας στιγμής; Γράψτε μας.</p>
+            </div>
+            <div class="contact-actions">
+              <a class="btn btn-wa js-wa" href="#contact" target="_blank" rel="noopener">Στείλτε μας στο WhatsApp</a>
+              <a class="btn btn-glow js-mail" href="#contact">Στείλτε email</a>
+            </div>
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer"><div class="wrap">© <span id="year"></span> Ενοικίαση Βαν Αθήνα · Αθήνα, Ελλάδα</div></footer>
+  <footer class="site-footer">
+    <div class="wrap">
+      <span>© <span id="year"></span> Ενοικίαση Βαν Αθήνα · Αθήνα, Ελλάδα</span>
+      <span>Φωτογραφίες από το Unsplash</span>
+    </div>
+  </footer>
 
   <!-- Floating contact buttons -->
   <div class="fab-wrap">
