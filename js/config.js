@@ -8,6 +8,6 @@ window.APP_CONFIG = {
   CURRENCY: "€",
   WHATSAPP_NUMBER: "306986900521",
   PHONE_NUMBER: "+306986900521",
-  PUBLIC_EMAIL: "info@ld-vanrental.com",
-  CONTACT_EMAIL: "info@ld-vanrental.com",
+  PUBLIC_EMAIL: "info@ld-vanrental.gr",
+  CONTACT_EMAIL: "info@ld-vanrental.gr",
 };
